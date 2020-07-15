@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-
+""" a function that does the math multiplication to two matrices"""
 
 def mat_mul(mat1, mat2):
     """ matrix multiplication of 2 2D matrices"""
