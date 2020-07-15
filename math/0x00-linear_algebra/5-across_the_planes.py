@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+""" function that adds two 2D matrices"""
 
 
 def add_matrices2D(mat1, mat2):
