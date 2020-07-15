@@ -1,4 +1,7 @@
 #!/usr/bin/env python3
+""" contains a function that oncatenates two matrices"""
+
+
 import numpy as np
 
 
