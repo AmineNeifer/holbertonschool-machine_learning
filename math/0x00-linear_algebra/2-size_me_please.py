@@ -1,13 +1,13 @@
 #!/usr/bin/env python3
+""" contains a function that return the shape of a matrix"""
 
 
 def matrix_shape(matrix):
     """ calculates the shape of matrix"""
-    try:
-        return([len(matrix), len(matrix[0]), len(matrix[0][0])])
-    except TypeError:
-        pass
-    try:
-        return([len(matrix), len(matrix[0])])
-    except TypeError:
-        return([len(matrix)])
+    shape = []
+    while True:
+        try:
+            shape.append(len(matrix))
+            matrix = matrix[0]
+        except TypeError:
+            return shape
