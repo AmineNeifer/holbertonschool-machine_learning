@@ -6,6 +6,7 @@ import numpy as np
 
 
 def np_slice(matrix, axes={}):
+    """ slices a matrix"""
     ax = []
     i = 0
     for number, element in axes.items():
