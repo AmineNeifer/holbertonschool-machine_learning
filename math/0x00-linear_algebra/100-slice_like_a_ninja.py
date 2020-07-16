@@ -2,8 +2,6 @@
 """ contains a function that slices a matrix along
     a specific axe"""
 
-import numpy as np
-
 
 def np_slice(matrix, axes={}):
     """ slices a matrix"""
