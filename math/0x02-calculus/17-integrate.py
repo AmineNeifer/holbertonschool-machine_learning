@@ -5,7 +5,7 @@
 
 def poly_integral(poly, C=0):
     """ integraling a polynom"""
-    if not poly or  type(C) is not int:
+    if not poly or type(C) is not int:
         return None
     poly_clone = poly[:]
     poly_clone.insert(0, C)
