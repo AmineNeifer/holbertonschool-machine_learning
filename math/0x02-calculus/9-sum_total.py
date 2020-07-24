@@ -7,7 +7,8 @@ def summation_i_squared(n):
     """ sigma summation"""
     if type(n) is not int:
         return None
-    summ = 0
-    for i in range(n):
-        summ += (i+1) ** 2
-    return summ
+
+    if n in (0, 1):
+        return n
+
+    return n ** 2 + summation_i_squared(n-1)
