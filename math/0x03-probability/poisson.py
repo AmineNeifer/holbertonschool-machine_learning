@@ -32,4 +32,6 @@ class Poisson:
         e = 2.7182818285
         lamda = self.lambtha
         k = int(k)
+        if k < lamda:
+            return 0
         return lamda ** k * e ** (-lamda) / self.factor(k)
