@@ -30,10 +30,22 @@ class Poisson:
         return fac
 
     def pmf(self, k):
-        """ calculates the pmf for a given number of successes """
+        """ calculates the pmf for a given number of successes"""
         e = 2.7182818285
         lamda = self.lambtha
         k = int(k)
         if k < lamda:
             return 0
         return lamda ** k * e ** (-lamda) / self.factor(k)
+
+    def cdf(self, k):
+        """ calculates the cdf for a given number of successes"""
+        e = 2.7182818285
+        lamda = self.lambtha
+        k = int(k)
+        if k < lamda:
+            return 0
+        summ = 0
+        for x in range(k + 1):
+            summ += e ** (-lamda) * lamda ** x / self.factor(x)
+        return summ
