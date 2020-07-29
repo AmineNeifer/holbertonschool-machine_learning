@@ -23,6 +23,8 @@ class Poisson:
     def factor(self, n):
         """ calculates the factorial of n"""
         fac = 1
+        if n == 0:
+            return 1
         for i in range(1, n+1):
             fac *= i
         return fac
