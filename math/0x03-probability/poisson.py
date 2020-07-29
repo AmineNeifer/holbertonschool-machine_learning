@@ -10,10 +10,9 @@ class Poisson:
     def __init__(self, data=None, lambtha=1.):
         self.data = data
         if data is None:
+            self.lambtha = float(lambtha)
             if lambtha < 0:
                 raise ValueError("lambtha must be a positive value")
-            else:
-                self.lambtha = float(lambtha)
         else:
             if type(data) is not list:
                 raise TypeError("data must be a list")
