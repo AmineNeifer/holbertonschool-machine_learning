@@ -37,6 +37,8 @@ class Normal:
         e = 2.7182818285
         pi = 3.1415926536
         o = self.stddev
+        if x < 0:
+            return 0
         return e ** ((-1/2) * self.z_score(x) ** 2) / (o * self.sqrt(2 * pi))
 
     def sqrt(self, x):
