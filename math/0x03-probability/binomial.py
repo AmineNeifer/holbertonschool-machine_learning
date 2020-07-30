@@ -28,3 +28,22 @@ class Binomial:
             self.p = 1 - (cat/mean)
             self.n = int(round(mean/self.p))
             self.p = mean/self.n
+
+    def pmf(self, k):
+        """ Calculates the value of the PMF for a given number of successes"""
+        p = self.p
+        n = self.n
+        return self.combination(self.n, k) * p ** k * (1-p) ** (n - k)
+
+    def combination(self, n, k):
+        """ calculates nCk"""
+        return self.fact(n) / (self.fact(k) * self.fact(n - k))
+
+    def fact(self, n):
+        """ Calculates n!"""
+        if n == 0:
+            return 1
+        fact = 1
+        for i in range(1, n+1):
+            fact *= i
+        return fact
