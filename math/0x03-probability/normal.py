@@ -37,11 +37,9 @@ class Normal:
         e = 2.7182818285
         pi = 3.1415926536
         o = self.stddev
-        """return e ** ((-1/2) * self.z_score(x) ** 2)
-        / (o * self.sqrt(2 * pi))"""
+        """return e ** ((-1/2) * self.z_score(x) ** 2) / (o * self.sqrt(2 * pi))"""
         p = self.z_score(x) ** 2
-        return (1 / (self.stddev * ((2 * pi)**0.5)) * (e ** ((-0.5) * p)))
-
+        return (e ** ((-0.5) * p)) / (self.stddev * ((2 * pi)**0.5))
     def cdf(self, x):
         """ Calculates the value of the CDF for a given x-value"""
         return (1 + self.erf(self.z_score(x) / self.sqrt(2))) / 2
