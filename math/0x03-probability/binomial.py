@@ -31,7 +31,7 @@ class Binomial:
 
     def pmf(self, k):
         """ Calculates the value of the PMF for a given number of successes"""
-        if not 0 <= k <= n:
+        if not 0 <= k <= self.n:
             return 0
         k = int(k)
         p = self.p
