@@ -38,6 +38,16 @@ class Binomial:
         n = self.n
         return self.combination(self.n, k) * p ** k * (1-p) ** (n - k)
 
+    def cdf(self, k):
+        """ Calculates the value of the CDF for a given number of successes"""
+        if not 0 <= k <= self.n:
+            return 0
+        k = int(k)
+        result = 0
+        for i in range(k + 1):
+            result += self.pmf(i)
+        return result
+
     def combination(self, n, k):
         """ calculates nCk"""
         return self.fact(n) / (self.fact(k) * self.fact(n - k))
