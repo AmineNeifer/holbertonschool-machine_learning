@@ -37,9 +37,21 @@ class Normal:
         e = 2.7182818285
         pi = 3.1415926536
         o = self.stddev
-        if x < 0:
-            return 0
         return e ** ((-1/2) * self.z_score(x) ** 2) / (o * self.sqrt(2 * pi))
+
+    def cdf(self, x):
+        """ Calculates the value of the CDF for a given x-value"""
+        return (1 + self.erf(self.z_score(x) / self.sqrt(2))) / 2
+
+    def erf(self, x):
+        """ Calculates the error function"""
+        pi = 3.1415926536
+        one = x
+        two = (x ** 3) / 3
+        three = (x ** 5) / 10
+        four = (x ** 7) / 42
+        five = (x ** 9) / 216
+        return 2 * (one - two + three - four + five) / self.sqrt(pi)
 
     def sqrt(self, x):
         """ returns square root of a number"""
