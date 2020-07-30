@@ -6,7 +6,6 @@
 
 class Normal:
     """ normal distibution class"""
-        
     def __init__(self, data=None, mean=0., stddev=1.):
         if data is None:
             self.stddev = float(stddev)
@@ -23,5 +22,5 @@ class Normal:
 
     def stddeviation(self, data):
         """ returns the standard deviation"""
-        variance = sum((xi - self.mean) ** 2 for xi in data)/ len(data)
+        variance = sum((xi - self.mean) ** 2 for xi in data) / len(data)
         return variance ** (1/2)
