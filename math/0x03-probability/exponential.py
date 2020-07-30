@@ -28,3 +28,11 @@ class Exponential:
         if x < 0:
             return 0
         return lamda * e ** (-lamda * x)
+
+    def cdf(self, x):
+        """ returns cdf of exponential"""
+        lamda = self.lambtha
+        e = 2.7182818285
+        if x < 0:
+            return 0
+        return 1 - e ** (-lamda * x)
