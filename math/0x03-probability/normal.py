@@ -20,9 +20,6 @@ class Normal:
             if len(data) < 2:
                 raise ValueError("data must contain multiple values")
             self.mean = sum(data) / len(data)
-            self.stddev = self.stddeviation(data)
-
-    def stddeviation(self, data):
-        """ returns the standard deviation"""
-        variance = sum((xi - self.mean) ** 2 for xi in data) / len(data)
-        return variance ** (1/2)
+            n = len(data)
+            m = self.mean
+            self.stddev = (sum((x - m) ** 2 for x in data) / n) ** (1/2)
