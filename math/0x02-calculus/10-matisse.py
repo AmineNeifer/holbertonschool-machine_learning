@@ -10,6 +10,8 @@ def poly_derivative(poly):
         return None
     if len(poly) == 1:
         return [0]
+    if poly == 0:
+        return([0])
     poly_clone = poly[:]
     for i in range(len(poly_clone)):
         poly_clone[i] *= i
