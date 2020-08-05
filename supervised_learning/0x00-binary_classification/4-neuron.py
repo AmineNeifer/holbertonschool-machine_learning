@@ -44,11 +44,5 @@ class Neuron:
     def evaluate(self, X, Y):
         """ Evaluates the neuron’s predictions"""
         A = self.forward_prop(X)
-        y_prediction = np.zeros((1, A.shape[1]), dtype=int)
-        for i in range(A.shape[1]):
-            if A[0, 1] >= 0.5:
-                y_prediction[0, i] = 1
-            else:
-                y_prediction[0, i] = int(y_prediction[0, i])
         cost = self.cost(Y, A)
-        return y_prediction, cost
+        return np.where(A >= 5, 1, 0), cost
