@@ -55,6 +55,6 @@ class Neuron:
         dW = np.sum(X * dZ, axis=1)
         db = np.sum(dZ)
         dW /= m
-        db /= mga
+        db /= m
         self.__W = self.__W - (alpha * dW)
         self.__b = self.__b - (alpha * db)
