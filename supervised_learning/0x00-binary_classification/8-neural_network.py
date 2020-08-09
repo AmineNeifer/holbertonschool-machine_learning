@@ -1,12 +1,12 @@
 #!/usr/bin/env python3
 
 
-""" contains class Neuron definition"""
+""" contains class NeuralNetwork definition"""
 import numpy as np
 
 
 class NeuralNetwork:
-    """ Class Neuron"""
+    """ Class NeuralNetwork"""
 
     def __init__(self, nx, nodes):
         if type(nx) is not int:
