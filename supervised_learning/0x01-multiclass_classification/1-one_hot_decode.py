@@ -11,7 +11,7 @@ def one_hot_decode(one_hot):
     m = one_hot.shape[0]
     new = np.ndarray((m,), dtype=int)
     try:
-        for i in ange(m):
+        for i in range(m):
             new[i] = int(np.argmax(one_hot.T[:][i]))
     except IndexError:
         return None
