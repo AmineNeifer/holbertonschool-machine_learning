@@ -17,7 +17,6 @@ class DeepNeuralNetwork:
             raise ValueError("nx must be a positive integer")
         if type(layers) is not list or not layers:
             raise TypeError("layers must be a list of positive integers")
-        self.__layers = layers
         self.__L = len(layers)
         self.__cache = {}
         self.__weights = {}
@@ -45,10 +44,6 @@ class DeepNeuralNetwork:
     @property
     def weights(self):
         return self.__weights
-
-    @property
-    def layers(self):
-        return self.__layers
 
     def forward_prop(self, X):
         """ Calculates the forward propagation which is X.W + b (b = 0)"""
