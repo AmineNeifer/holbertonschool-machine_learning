@@ -68,25 +68,20 @@ class DeepNeuralNetwork:
 
     def gradient_descent(self, Y, cache, alpha=0.05):
         """ Calculates one pass of gradient descent on the neuron"""
+        weighs = self.__weights.copy()
         m = self.__cache["A0"].shape[1]
         length = self.__L
         A, _ = self.forward_prop(self.__cache["A0"])
         dZ = A - Y
-        dW = np.matmul(dZ, self.__cache["A" + str(length)].T) / m
-        db = np.sum(dZ, axis=1, keepdims=True) / m
-        self.__cache["dZ" + str(length)] = dZ
-        self.__weights["W" + str(length)] = \
-            self.__weights["W" + str(length)] - (alpha * dW)
-        self.__weights["b" + str(length)] = \
-            self.__weights["b" + str(length)] - (alpha * db)
 
-        for i in range(self.__L - 1, 0, -1):
+        for i in range(self.__L - 1, -1, -1):
             A = self.__cache["A" + str(i)]
-            dZ = np.matmul(
-                self.__weights["W" + str(i+1)].T, dZ) * (A * (1 - A))
-            dW = np.matmul(dZ, self.__cache["A" + str(i-1)].T) / m
+
+            dW = np.matmul(dZ, A.T) / m
             db = np.sum(dZ, axis=1, keepdims=True) / m
-            self.__weights["W" + str(i)] = \
-                self.__weights["W" + str(i)] - (alpha * dW)
-            self.__weights["b" + str(i)] = \
-                self.__weights["b" + str(i)] - (alpha * db)
+            self.__weights["W" + str(i+1)] = \
+                self.__weights["W" + str(i+1)] - (alpha * dW)
+            self.__weights["b" + str(i+1)] = \
+                self.__weights["b" + str(i+1)] - (alpha * db)
+            dZ = np.matmul(
+                weighs["W" + str(i+1)].T, dZ) * (A * (1 - A))
