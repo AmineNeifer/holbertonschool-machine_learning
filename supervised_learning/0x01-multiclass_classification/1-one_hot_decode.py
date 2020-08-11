@@ -10,7 +10,7 @@ def one_hot_decode(one_hot):
     if one_hot is None:
         return None
     m = one_hot.shape[0]
-    new = np.ndarray((m,))
+    new = np.ndarray((m,), dtype=int)
     for i in range(m):
         new[i] = int(np.argmax(one_hot.T[:][i]))
     return new
