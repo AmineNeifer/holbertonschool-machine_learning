@@ -9,6 +9,8 @@ def one_hot_encode(Y, classes):
     """ converts a numeric label vector into a one-hot matrix"""
     if Y is None or classes is None:
         return None
+    if len(Y) == 0:
+        return None
     if type(classes) is not int:
         return None
     if classes < 0:
