@@ -16,9 +16,8 @@ def one_hot_encode(Y, classes):
     if Y.max() > classes:
         return None
     try:
-        new = np.zeros((Y.shape[0], classes))
-        for i in range(len(Y)):
-            new[i][Y[i]] = 1
+        new = np.zeros((Y.shape[0], Y.max() + 1))
+        new[np.arange(Y.size), Y] = 1
         return new.T
     except IndexError:
         return None
