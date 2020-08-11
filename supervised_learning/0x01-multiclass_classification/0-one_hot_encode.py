@@ -13,7 +13,12 @@ def one_hot_encode(Y, classes):
         return None
     if classes <= 0:
         return None
-    new = np.zeros((Y.shape[0], classes))
-    for i in range(len(Y)):
-        new[i][Y[i]] = 1
-    return new.T
+    if Y.max() > classes:
+        return None
+    try:
+        new = np.zeros((Y.shape[0], classes))
+        for i in range(len(Y)):
+            new[i][Y[i]] = 1
+        return new.T
+    except IndexError:
+        return None
