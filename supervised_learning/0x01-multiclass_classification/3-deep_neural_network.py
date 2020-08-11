@@ -71,7 +71,7 @@ class DeepNeuralNetwork:
         """ Evaluates the neuron’s predictions"""
         A, _ = self.forward_prop(X)
         tmp = np.amax(A, axis=0)
-        return np.where(A == tmp, 1, 0), cost
+        return np.where(A == tmp, 1, 0), self.cost(Y, A)
 
     def gradient_descent(self, Y, cache, alpha=0.05):
         """ Calculates one pass of gradient descent on the neuron"""
