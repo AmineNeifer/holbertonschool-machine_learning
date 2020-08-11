@@ -11,9 +11,11 @@ def one_hot_encode(Y, classes):
         return None
     if type(classes) is not int:
         return None
-    if classes <= 0:
+    if classes < 0:
         return None
     if Y.max() > classes:
+        return None
+    if Y.minimum() < 0:
         return None
     try:
         new = np.zeros((Y.shape[0], classes))
