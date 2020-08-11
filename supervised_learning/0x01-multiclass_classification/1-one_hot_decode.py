@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 
 
+""" contains one hot decoder function"""
 import numpy as np
 
 
@@ -10,9 +11,6 @@ def one_hot_decode(one_hot):
         return None
     m = one_hot.shape[0]
     new = np.ndarray((m,), dtype=int)
-    try:
-        for i in range(m):
-            new[i] = int(np.argmax(one_hot.T[:][i]))
-    except IndexError:
-        return None
+    for i in range(m):
+        new[i] = int(np.argmax(one_hot.T[:][i]))
     return new
