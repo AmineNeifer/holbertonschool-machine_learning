@@ -109,15 +109,15 @@ class DeepNeuralNetwork:
             if step <= 0 or step > iterations:
                 raise ValueError("step must be positive and <= iterations")
 
-            for i in range(0, iterations + 1):
-                A, cache = self.forward_prop(X)
-                self.gradient_descent(Y, cache, alpha)
-                if (i == 0 or i % step == 0 or i == iterations):
-                    cost = self.cost(Y, A)
-                    it.append(i)
-                    co.append(cost)
-                    if verbose is True:
-                        print("Cost after {} iterations: {}".format(i, cost))
+        for i in range(0, iterations + 1):
+            A, cache = self.forward_prop(X)
+            self.gradient_descent(Y, cache, alpha)
+            if (i == 0 or i % step == 0 or i == iterations):
+                cost = self.cost(Y, A)
+                it.append(i)
+                co.append(cost)
+                if verbose is True:
+                    print("Cost after {} iterations: {}".format(i, cost))
         else:
             for i in range(0, iterations):
                 A, cache = self.forward_prop(X)
