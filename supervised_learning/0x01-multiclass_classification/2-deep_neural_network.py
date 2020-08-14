@@ -108,7 +108,7 @@ class DeepNeuralNetwork:
                 raise TypeError("step must be an integer")
             if step <= 0 or step > iterations:
                 raise ValueError("step must be positive and <= iterations")
-        
+
             for i in range(0, iterations + 1):
                 A, cache = self.forward_prop(X)
                 self.gradient_descent(Y, cache, alpha)
@@ -146,4 +146,4 @@ class DeepNeuralNetwork:
                 saved = pickle.load(fileObject)
             return saved
         except FileNotFoundError:
-            return None 
+            return None
