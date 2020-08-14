@@ -118,11 +118,11 @@ class DeepNeuralNetwork:
                 co.append(cost)
                 if verbose is True:
                     print("Cost after {} iterations: {}".format(i, cost))
-        else:
-            for i in range(0, iterations):
-                A, cache = self.forward_prop(X)
-                self.gradient_descent(Y, cache, alpha)
-                cost = self.cost(Y, A)
+        # else:
+        #     for i in range(0, iterations):
+        #         A, cache = self.forward_prop(X)
+        #         self.gradient_descent(Y, cache, alpha)
+        #         cost = self.cost(Y, A)
         if graph is True:
             plt.plot(it, co)
             plt.xlabel("iteration")
