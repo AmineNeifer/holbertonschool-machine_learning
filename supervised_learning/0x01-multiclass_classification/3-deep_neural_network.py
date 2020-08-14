@@ -91,7 +91,7 @@ class DeepNeuralNetwork:
             self.__weights["b" + str(i+1)] = \
                 self.__weights["b" + str(i+1)] - (alpha * db)
             dZ = np.matmul(
-                weighs["W" + str(i+1)].T, dZ) * (A * (1 - A))
+                weighs["W" + str(i+1)].T, dZ) * (A * (1.0000001 - A))
 
     def train(self, X, Y, iterations=5000, alpha=0.05,
               verbose=True, graph=True, step=100):
@@ -111,7 +111,7 @@ class DeepNeuralNetwork:
                 (verbose is False and graph is True):
             if type(step) is not int:
                 raise TypeError("step must be an integer")
-            if step < 0 or step > iterations:
+            if step <= 0 or step > iterations:
                 raise ValueError("step must be positive and <= iterations")
         if verbose is True:
             for i in range(0, iterations + 1):
@@ -120,8 +120,13 @@ class DeepNeuralNetwork:
                 cost = self.cost(Y, A)
                 it.append(i)
                 co.append(cost)
-                if (i == 0 or i % step == 0):
+                if (i == 0 or i % step == 0 or i == iterations):
                     print("Cost after {} iterations: {}".format(i, cost))
+        else:
+            for i in range(0, iterations):
+                A, cache = self.forward_prop(X)
+                self.gradient_descent(Y, cache, alpha)
+                cost = self.cost(Y, A)
         if graph is True:
             plt.plot(it, co)
             plt.xlabel("iteration")
@@ -132,17 +137,17 @@ class DeepNeuralNetwork:
 
     def save(self, filename):
         """ Saves the instance object to a file in pickle format"""
-        nx = self.__cache["A0"].shape[0]
-        if not(filename.endswith("..pkl")):
+        if not(filename.endswith(".pkl")):
             filename = filename + ".pkl"
-        fileObject = open(filename, 'wb')
-        pickle.dump(self, fileObject)
-        fileObject.close()
+        with open(filename, 'wb') as fileObject:
+            pickle.dump(self, fileObject)
 
     @staticmethod
     def load(filename):
         """ Loads a pickled DeepNeuralNetwork object"""
-        fileObject = open(filename, 'rb')
-        saved = pickle.load(fileObject)
-        fileObject.close()
-        return saved
+        try:
+            with open(filename, 'rb') as fileObject:
+                saved = pickle.load(fileObject)
+            return saved
+        except FileNotFoundError:
+            return None 
