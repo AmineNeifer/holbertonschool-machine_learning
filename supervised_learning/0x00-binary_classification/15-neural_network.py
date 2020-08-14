@@ -102,7 +102,7 @@ class NeuralNetwork:
                 (verbose is False and graph is True):
             if type(step) is not int:
                 raise TypeError("step must be an integer")
-            if step < 0 or step > iterations:
+            if step <= 0 or step > iterations:
                 raise ValueError("step must be positive and <= iterations")
         if verbose is True:
             for i in range(0, iterations + 1):
@@ -111,8 +111,13 @@ class NeuralNetwork:
                 cost = self.cost(Y, self.__A2)
                 it.append(i)
                 co.append(cost)
-                if (i == 0 or i % step == 0):
+                if (i == 0 or i % step == 0 or i == iterations):
                     print("Cost after {} iterations: {}".format(i, cost))
+        else:
+            for i in range(0, iterations):
+                self.forward_prop(X)
+                self.gradient_descent(X, Y, self.__A1, self.__A2, alpha)
+                cost = self.cost(Y, self.__A2)
         if graph is True:
             plt.plot(it, co)
             plt.xlabel("iteration")
