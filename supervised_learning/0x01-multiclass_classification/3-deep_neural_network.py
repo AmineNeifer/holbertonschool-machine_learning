@@ -64,8 +64,7 @@ class DeepNeuralNetwork:
 
     def cost(self, Y, A):
         """ Calculates the cost"""
-        c = - ((np.sum(Y * np.log(A))) / Y.shape[1])
-        return c
+        return (-1 / Y.shape[1]) * np.sum(Y * np.log(A))
 
     def evaluate(self, X, Y):
         """ Evaluates the neuron’s predictions"""
@@ -91,7 +90,7 @@ class DeepNeuralNetwork:
             self.__weights["b" + str(i+1)] = \
                 self.__weights["b" + str(i+1)] - (alpha * db)
             dZ = np.matmul(
-                weighs["W" + str(i+1)].T, dZ) * (A * (1.0000001 - A))
+                weighs["W" + str(i+1)].T, dZ) * (A * (1 - A))
 
     def train(self, X, Y, iterations=5000, alpha=0.05,
               verbose=True, graph=True, step=100):
