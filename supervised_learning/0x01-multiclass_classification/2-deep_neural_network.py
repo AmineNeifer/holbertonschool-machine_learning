@@ -92,6 +92,44 @@ class DeepNeuralNetwork:
               verbose=True, graph=True, step=100):
         """ Trains the neuron by updating the
         private attributes __W, __b, and __A"""
+        # it = []
+        # co = []
+        # if type(iterations) is not int:
+        #     raise TypeError("iterations must be an integer")
+        # if iterations < 0:
+        #     raise ValueError("iterations must be a positive integer")
+        # if type(alpha) is not float:
+        #     raise TypeError("alpha must be a float")
+        # if alpha <= 0:
+        #     raise ValueError("alpha must be positive")
+        # if (verbose is True and graph is False) or \
+        #         (verbose is False and graph is True):
+        #     if type(step) is not int:
+        #         raise TypeError("step must be an integer")
+        #     if step <= 0 or step > iterations:
+        #         raise ValueError("step must be positive and <= iterations")
+
+        # for i in range(0, iterations + 1):
+        #     A, cache = self.forward_prop(X)
+        #     self.gradient_descent(Y, cache, alpha)
+        #     if (i == 0 or i % step == 0 or i == iterations):
+        #         cost = self.cost(Y, A)
+        #         it.append(i)
+        #         co.append(cost)
+        #         if verbose is True:
+        #             print("Cost after {} iterations: {}".format(i, cost))
+        # else:
+        #     for i in range(0, iterations):
+        #         A, cache = self.forward_prop(X)
+        #         self.gradient_descent(Y, cache, alpha)
+        #         cost = self.cost(Y, A)
+        # if graph is True:
+        #     plt.plot(it, co)
+        #     plt.xlabel("iteration")
+        #     plt.ylabel("cost")
+        #     plt.title("Training Cost")
+        #     plt.show()
+        # return self.evaluate(X, Y)
         it = []
         co = []
         if type(iterations) is not int:
@@ -118,11 +156,6 @@ class DeepNeuralNetwork:
                 co.append(cost)
                 if verbose is True:
                     print("Cost after {} iterations: {}".format(i, cost))
-        else:
-            for i in range(0, iterations):
-                A, cache = self.forward_prop(X)
-                self.gradient_descent(Y, cache, alpha)
-                cost = self.cost(Y, A)
         if graph is True:
             plt.plot(it, co)
             plt.xlabel("iteration")
