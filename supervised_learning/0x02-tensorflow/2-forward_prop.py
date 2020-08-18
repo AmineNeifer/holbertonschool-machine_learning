@@ -1,9 +1,10 @@
 #!/usr/bin/env python3
 
 
+""" contains forward prop funct"""
+
 import tensorflow as tf
 create_layer = __import__('1-create_layer').create_layer
-""" contains forward prop funct"""
 
 
 def forward_prop(x, layer_sizes=[], activations=[]):
