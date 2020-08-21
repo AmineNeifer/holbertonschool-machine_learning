@@ -57,14 +57,14 @@ def train(
                                 x: X_train,
                                 y: Y_train})))
                 print(
-                    "\tTraining Cost: {}".format(
+                    "\tValidation Cost: {}".format(
                         sess.run(
                             loss,
                             feed_dict={
                                 x: X_valid,
                                 y: Y_valid})))
                 print(
-                    "\tTraining Accuracy: {}".format(
+                    "\tValidation Accuracy: {}".format(
                         sess.run(
                             accuracy,
                             feed_dict={
