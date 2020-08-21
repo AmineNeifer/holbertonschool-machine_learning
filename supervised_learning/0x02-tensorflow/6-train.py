@@ -41,7 +41,7 @@ def train(
         sess.run(init)
         for i in range(iterations + 1):
             if (i % 100 == 0 or i == iterations):
-                print("After {} iterations".format(i))
+                print("After {} iterations:".format(i))
                 print(
                     "\tTraining Cost: {}".format(
                         sess.run(
