@@ -7,4 +7,5 @@ import numpy as np
 
 def shuffle_data(X, Y):
     """ Returns: X & Y shuffled"""
-    return np.random.permutation(X), np.random.permutation(Y)
+    p = np.random.permutation(len(X))
+    return X[p], Y[p]
