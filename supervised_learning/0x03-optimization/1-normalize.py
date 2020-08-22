@@ -8,5 +8,5 @@ import numpy as np
 def normalize(X, m, s):
     """ Returns: The normalized X matrix"""
     X -= m
-    X /= s 
+    X /= s
     return X
