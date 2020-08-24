@@ -9,3 +9,5 @@ def shuffle_data(X, Y):
     """ Returns: X & Y shuffled"""
     np.random.seed(0)
     return np.random.permutation(X), np.random.permutation(Y)
+    p = np.random.permutation(len(X))
+    return X[p], Y[p]
