@@ -2,7 +2,6 @@
 
 
 """ contains l2 reg cost"""
-import numpy as np
 import tensorflow as tf
 
 
