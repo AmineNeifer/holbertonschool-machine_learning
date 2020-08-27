@@ -6,7 +6,8 @@ import numpy as np
 
 
 def l2_reg_gradient_descent(Y, weights, cache, alpha, lambtha, L):
-    """ updates the weights and biases of a neural network using gradient descent with L2 regularization"""
+    """ updates the weights and biases of a neural network
+    using gradient descent with L2 regularization"""
     m = Y.shape[1]
     new_ws = weights.copy()
 
@@ -42,5 +43,5 @@ def l2_reg_gradient_descent(Y, weights, cache, alpha, lambtha, L):
         dW = np.matmul(dz, prev_A.T) / m
         db = np.sum(dz, axis=1, keepdims=True) / m
 
-        weights['W' + str(i + 1)] = W - (alpha * dW) + lambtha * W / m
+        weights['W' + str(i + 1)] = W - (alpha * dW) - (alpha * lambtha) / m * W 
         weights['b' + str(i + 1)] = b - (alpha * db)
