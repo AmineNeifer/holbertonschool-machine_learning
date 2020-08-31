@@ -24,8 +24,8 @@ def build_model(nx, layers, activations, lambtha, keep_prob):
                 list_layer.append(
                     K.layers.Dense(
                         layers[i],
-                        activation=activations[i])),
-                    kernel_regularizer=l2)
+                        activation=activations[i],
+                        kernel_regularizer=l2))
             list_layer.append(K.layers.Dropout(keep_prob))
         else:
             list_layer.append(K.layers.Dense(layers[i], kernel_regularizer=l2))
