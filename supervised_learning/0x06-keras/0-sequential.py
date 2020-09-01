@@ -16,7 +16,7 @@ def build_model(nx, layers, activations, lambtha, keep_prob):
                     K.layers.Dense(
                         layers[i],
                         activation=activations[i],
-                        input_shape=(nx,),
+                        input_shape=nx,
                         kernel_regularizer=l2))
             else:
                 model.add(
