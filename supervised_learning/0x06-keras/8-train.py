@@ -23,7 +23,10 @@ def train_model(network, data, labels, batch_size, epochs,
             c_back = K.callbacks.LearningRateScheduler(scheduler, 1)
             callback.append(c_back)
     if (save_best):
-        callback.append(K.callbacks.ModelCheckpoint(filepath=filepath, save_best_only=True))
+        callback.append(
+            K.callbacks.ModelCheckpoint(
+                filepath=filepath,
+                save_best_only=True))
     if validation_data is False and save_best is False:
         callback = None
 
