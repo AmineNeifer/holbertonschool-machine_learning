@@ -12,7 +12,7 @@ def save_config(network, filename):
     return None
 
 
-def load_config(network, filename):
+def load_config(filename):
     """ loads a model configs"""
     with open(filename, "r") as f:
         r = f.read()
