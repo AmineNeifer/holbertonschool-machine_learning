@@ -6,14 +6,15 @@ import tensorflow.keras as K
 
 
 def save_config(network, filename):
-    """ saves a model weights"""
+    """ saves a modelc configs"""
     with open(filename, "w") as f:
         f.write(network.to_json())
     return None
 
 
 def load_config(network, filename):
-    """ loads a model weights"""
+    """ loads a model configs"""
     with open(filename, "r") as f:
-        load = K.models.model_from_json(f.read())
+        r = f.read()
+        load = K.models.model_from_json(r)
     return None
