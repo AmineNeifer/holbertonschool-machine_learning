@@ -9,5 +9,6 @@ def train_model(network, data, labels, batch_size,
                 epochs, validation_data=None, verbose=True, shuffle=False):
     """ train model using keras"""
     history = network.fit(data, labels, batch_size=batch_size,
-                          epochs=epochs, validation_data=validation_data, shuffle=shuffle, verbose=verbose)
+                          epochs=epochs, validation_data=validation_data,
+                          shuffle=shuffle, verbose=verbose)
     return history
