@@ -23,9 +23,6 @@ def convolve_grayscale(images, kernel, padding='same', stride=(1, 1)):
                 sh is the stride for the height of the image
                 sw is the stride for the width of the image
         Returns: a numpy.ndarray containing the convolved images"""
-    assert len(kernel.shape) == 3
-    assert len(images.shape) == 3
-    assert kernel.shape[2] == conv_input.shape[2]
     m, h, w = images.shape
     kh, kw = kernel.shape
     sh, sw = stride
