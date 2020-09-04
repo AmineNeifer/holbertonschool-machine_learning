@@ -17,11 +17,11 @@ def convolve_grayscale_same(images, kernel):
                 kw is the width of the kernel
 
         Returns: a numpy.ndarray containing the convolved images"""
-    #image_padded = np.pad(images, ((0, 0), (1, 1), (1, 1)),
+    # image_padded = np.pad(images, ((0, 0), (1, 1), (1, 1)),
     #                      mode="constant", constant_values=0)
     m, h, w = images.shape
     kh, kw = kernel.shape
-    
+
     pad_h = max((kh - 1, 0))
     pad_w = max((kw - 1, 0))
     pad_h = pad_h // 2
