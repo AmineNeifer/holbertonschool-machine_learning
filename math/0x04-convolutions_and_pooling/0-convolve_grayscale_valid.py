@@ -3,7 +3,6 @@
 
 """ contains a function to valid convolve a matrix"""
 import numpy as np
-from math import ceil, floor
 
 
 def convolve_grayscale_valid(images, kernel):
@@ -21,8 +20,8 @@ def convolve_grayscale_valid(images, kernel):
     m, h, w = images.shape
     kh, kw = kernel.shape
 
-    output_height = int(ceil(h - kh + 1))
-    output_width = int(ceil(w - kw + 1))
+    output_height = int(h - kh + 1)
+    output_width = int(w - kw + 1)
 
     output = np.zeros((m, output_height, output_width))
     for h in range(output_height):
