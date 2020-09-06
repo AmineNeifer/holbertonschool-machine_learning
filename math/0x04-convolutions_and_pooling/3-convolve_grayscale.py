@@ -33,7 +33,6 @@ def convolve_grayscale(images, kernel, padding='same', stride=(1, 1)):
         pad_h = int(((h - 1) * sh + kh - h) / 2 + 1)
         pad_w = int(((w - 1) * sw + kw - w) / 2 + 1)
 
-
         image_padded = np.zeros((m, h + 2 * pad_h, w + 2 * pad_w))
         image_padded[:, pad_h:h + pad_h, pad_w:w + pad_w] = np.copy(images)
     elif padding == "valid":
@@ -50,7 +49,6 @@ def convolve_grayscale(images, kernel, padding='same', stride=(1, 1)):
 
         output_height = int((h - kh + (2 * ph) + 1) // sh)
         output_width = int((w - kw + (2 * pw) + 1) // sw)
-
 
         image_padded = np.pad(
             images, ((0, 0), (p_t, p_b), (p_l, p_r)),
