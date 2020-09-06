@@ -31,8 +31,8 @@ def convolve_channels(images, kernel, padding='same', stride=(1, 1)):
         output_height = h
         output_width = w
 
-        pad_h = int(np.ceil(((h - 1) * sh + kh - h) / 2))
-        pad_w = int(np.ceil(((w - 1) * sw + kw - w) / 2))
+        pad_h = int(((h - 1) * sh + kh - h) / 2 + 1)
+        pad_w = int(((w - 1) * sw + kw - w) / 2 + 1)
 
         image_padded = np.zeros((m, h + 2 * pad_h, w + 2 * pad_w, c))
         image_padded[:, pad_h:h + pad_h, pad_w:w + pad_w, :] = images
