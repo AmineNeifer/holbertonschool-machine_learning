@@ -6,22 +6,22 @@ import numpy as np
 
 
 def conv_forward(A_prev, W, b, activation, padding="same", stride=(1, 1)):
-    """ Performs forward propagation over a convolutional layer of a neural network:
+    """ Performs forward prop over a convo layer of a neural network:
 
-        @A_prev is a numpy.ndarray of shape (m, h_prev, w_prev, c_prev) containing the output of the previous layer
+        @A_prev: (m, h_prev, w_prev, c_prev) contains the output of prev layer
                 m is the number of examples
                 h_prev is the height of the previous layer
                 w_prev is the width of the previous layer
                 c_prev is the number of channels in the previous layer
-        @W is a numpy.ndarray of shape (kh, kw, c_prev, c_new) containing the kernels for the convolution
+        @W: (kh, kw, c_prev, c_new) containing the kernels for the convolution
                 kh is the filter height
                 kw is the filter width
                 c_prev is the number of channels in the previous layer
                 c_new is the number of channels in the output
-        @b is a numpy.ndarray of shape (1, 1, 1, c_new) containing the biases applied to the convolution
+        @b: (1, 1, 1, c_new) containing the biases
         @activation is an activation function applied to the convolution
-        @padding is a string that is either same or valid, indicating the type of padding used
-        @stride is a tuple of (sh, sw) containing the strides for the convolution
+        @padding:string that is either same or valid
+        @stride is a tuple of (sh, sw) containing the strides for the convo
                 sh is the stride for the height
                 sw is the stride for the width"
 
@@ -48,7 +48,7 @@ def convolve(images, kernels, padding='same', stride=(1, 1)):
         @padding: a tuple of (ph, pw), 'same' or 'valid'
                 ph is the padding for the height of the image
                 pw is the padding for the width of the image
-                the image should be padded with 0’s
+                the image should be padded with 0s
         @stride: a tuple of (sh, sw)
                 sh is the stride for the height of the image
                 sw is the stride for the width of the image
