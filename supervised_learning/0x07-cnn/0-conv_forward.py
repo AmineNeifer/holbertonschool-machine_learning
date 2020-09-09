@@ -57,24 +57,15 @@ def convolve(images, kernels, padding='same', stride=(1, 1)):
     kh, kw, _, nc = kernels.shape
     sh, sw = stride
     if padding == "same":
-        ph, pw = 0, 0
 
-        if kh % 2 == 1:
-            ph = (kh - 1) // 2
-        else:
-            ph = kh // 2
-        if kw % 2 == 1:
-            pw = (kw - 1) // 2
-        else:
-            pad_w = kw // 2
+        ph = int(((h - 1) * sh + kh - h) / 2 + 1)
+        pw = int(((w - 1) * sw + kw - w) / 2 + 1)
 
         image_padded = np.zeros((m, h + 2 * ph, w + 2 * pw, c))
         image_padded[:, ph:h + ph, pw:w + pw, :] = images
 
     elif padding == "valid":
         ph, pw = 0, 0
-        output_height = int(np.ceil((h - kh + 1) / sh))
-        output_width = int(np.ceil((w - kw + 1) / sw))
         image_padded = np.copy(images)
 
     output_height = int((h - kh + (2 * ph)) // sh + 1)
