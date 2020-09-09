@@ -71,17 +71,6 @@ def convolve(images, kernels, padding='same', stride=(1, 1)):
         output_width = int(np.ceil((w - kw + 1) / sw))
         image_padded = np.copy(images)
 
-    elif isinstance(padding, tuple):
-        ph, pw = padding
-        p_l = pw
-        p_r = pw
-        p_t = ph
-        p_b = ph
-
-        image_padded = np.pad(
-            images, ((0, 0), (p_t, p_b), (p_l, p_r), (0, 0)),
-            mode="constant", constant_values=0)
-
     output_height = int((h - kh + (2 * ph)) // sh + 1)
     output_width = int((w - kw + (2 * pw)) // sw + 1)
 
