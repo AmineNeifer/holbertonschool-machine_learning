@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 
+""" contains lenet5 funct in keras"""
 import tensorflow.keras as K
 
 
@@ -39,6 +40,7 @@ def lenet5(X):
     n = K.layers.Dense(units=10, activation='softmax',
                        kernel_initializer=w)(n)
     model = K.models.Model(inputs=X, outputs=n)
-    model.compile(loss='categorical_crossentropy', optimizer=K.optimizers.Adam(),
+    model.compile(loss='categorical_crossentropy',
+                  optimizer=K.optimizers.Adam(),
                   metrics=['accuracy'])
     return model
