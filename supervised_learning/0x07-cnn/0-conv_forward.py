@@ -58,8 +58,8 @@ def convolve(images, kernels, padding='same', stride=(1, 1)):
     sh, sw = stride
     if padding == "same":
 
-        ph = int(((h - 1) * sh + kh - h) / 2 + 1)
-        pw = int(((w - 1) * sw + kw - w) / 2 + 1)
+        ph = int(((h - 1) * sh + kh - kh % 2 - h) / 2 + 1)
+        pw = int(((w - 1) * sw + kw - kw % 2 - w) / 2 + 1)
 
         image_padded = np.zeros((m, h + 2 * ph, w + 2 * pw, c))
         image_padded[:, ph:h + ph, pw:w + pw, :] = images
