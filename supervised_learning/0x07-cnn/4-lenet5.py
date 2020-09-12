@@ -32,48 +32,45 @@ def lenet5(x, y):
     w = tf.contrib.layers.variance_scaling_initializer()
 
     # Convolutional layer with 6 kernels of shape 5x5 with same padding
-    conv_layer = tf.layers.Conv2D(
+    C1 = tf.layers.Conv2D(
         filters=6,
         kernel_size=(
             5,
             5),
-        activation='relu',
         padding="same",
+        activation='relu',
         kernel_initializer=w)(x)
-    # Max pooling layer with kernels of shape 2x2 with 2x2 strides
-    max_pool_layer = tf.layers.MaxPooling2D(
-        pool_size=2, strides=(2, 2))(conv_layer)
+    # Max pooling layer with kernels of shape  2x2 with 2x2 strides
+    S2 = tf.layers.MaxPooling2D(pool_size=(2, 2), strides=(2, 2))(C1)
     # Convolutional layer with 16 kernels of shape 5x5 with valid padding
-    conv_layer1 = tf.layers.Conv2D(
+    C3 = tf.layers.Conv2D(
         filters=16,
         kernel_size=(
             5,
             5),
         activation='relu',
         padding="valid",
-        kernel_initializer=w)(max_pool_layer)
+        kernel_initializer=w)(S2)
     # Max pooling layer with kernels of shape 2x2 with 2x2 strides
-    max_pool_layer1 = tf.layers.MaxPooling2D(
-        pool_size=2, strides=(2, 2))(conv_layer1)
+    S4 = tf.layers.MaxPooling2D(pool_size=(2, 2), strides=(2, 2))(C3)
     # our array should be flatten to become 1D
-    Flat = tf.layers.Flatten()(max_pool_layer1)
+    C5 = tf.layers.Flatten()(S4)
     # Fully connected layer with 120 nodes
-    FC = tf.layers.Dense(
-        units=128,
+    F6 = tf.layers.Dense(
+        units=120,
         activation='relu',
-        kernel_initializer=w)(Flat)
+        kernel_initializer=w)(C5)
     # Fully connected layer with 84 nodes
-    FC1 = tf.layers.Dense(
-        units=84,
-        activation='relu',
-        kernel_initializer=w)(FC)
+    F7 = tf.layers.Dense(units=84, activation='relu', kernel_initializer=w)(F6)
     # Fully connected layer with 10 nodes
-    FC2 = tf.layers.Dense(units=10, kernel_initializer=w)(FC1)
+    F8 = tf.layers.Dense(units=10, kernel_initializer=w)(F7)
 
-    s = tf.nn.softmax(FC2)
-    loss = tf.losses.softmax_cross_entropy(y, s)
-    adam = tf.train.AdamOptimizer().minimize(loss)
+    s = tf.nn.softmax(F8)
+
+    loss = tf.losses.softmax_cross_entropy(y, F8)
+
     # accuracy
-    equality = tf.equal(tf.argmax(FC2, 1), tf.argmax(y, 1))
+    equality = tf.equal(tf.argmax(F8, 1), tf.argmax(y, 1))
     acc = tf.reduce_mean(tf.cast(equality, tf.float32))
+    adam = tf.train.AdamOptimizer().minimize(loss)
     return s, adam, loss, acc
