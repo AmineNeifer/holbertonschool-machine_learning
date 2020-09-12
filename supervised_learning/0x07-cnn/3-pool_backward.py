@@ -48,7 +48,7 @@ def pool_backward(dA, A_prev, kernel_shape, stride=(1, 1), mode='max'):
                         mask = create_mask(a_prev_slice)
                         dA_prev[i, vs:ve, hs:he,
                                 c] += np.multiply(mask, dA[i, h, w, c])
-                    elif mode == "average":
+                    elif mode == "avg":
                         da = dA[i, h, w, c]
                         dA_prev[i, vs:ve, hs:he,
                                 c] += distribute_value(da, kernel_shape)
