@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 
-
+"""contains pooling backward function"""
 import numpy as np
 
 
