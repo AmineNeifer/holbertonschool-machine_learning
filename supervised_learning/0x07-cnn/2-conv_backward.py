@@ -53,9 +53,11 @@ def conv_backward(dZ, A_prev, W, b, padding="same", stride=(1, 1)):
         ph, pw = 0, 0
 
     A_prev_pad = np.pad(
-        A_prev, ((0, 0), (ph, ph), (pw, pw), (0, 0)), constant_values=0, mode='constant')
+        A_prev, ((0, 0), (ph, ph), (pw, pw), (0, 0)),
+        constant_values=0, mode='constant')
     dA_prev_pad = np.pad(
-        dA_prev, ((0, 0), (ph, ph), (pw, pw), (0, 0)), constant_values=0, mode='constant')
+        dA_prev, ((0, 0), (ph, ph), (pw, pw), (0, 0)),
+        constant_values=0, mode='constant')
 
     for i in range(m):
         a_prev_pad = A_prev_pad[i]
@@ -78,5 +80,5 @@ def conv_backward(dZ, A_prev, W, b, padding="same", stride=(1, 1)):
         if (padding == 'valid'):
             dA_prev[i, :, :, :] = da_prev_pad
         elif (padding == 'same'):
-            dA_prev[i, :, :, :] = da_prev_pad[ph:-ph, pw:-pw,:]
+            dA_prev[i, :, :, :] = da_prev_pad[ph:-ph, pw:-pw, :]
     return dA_prev, dW, db
