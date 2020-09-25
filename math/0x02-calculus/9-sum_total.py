@@ -5,12 +5,10 @@
 
 def summation_i_squared(n):
     """ sigma summation"""
-    if type(n) is not int:
+    if not isinstance(n, int):
         return None
-
     if n == 1:
         return 1
-    if n < 0:
-        return n ** 2 + summation_i_squared(n+1)
-    else:
-        return n ** 2 + summation_i_squared(n-1)
+    if n < 1:
+        return None
+    return (n * (n + 1) * (2 * n + 1)) // 6
