@@ -16,6 +16,7 @@ pca_data = np.matmul(norm_data, Vh[:3].T)
 fig = plt.figure()
 ax = plt.axes(projection='3d')
 x, y, z = pca_data[:, 0], pca_data[:, 1], pca_data[:, 2]
+ax.set_title("PCA of Iris Dataset")
 ax.set_xlabel("U1")
 ax.set_ylabel("U2")
 ax.set_zlabel("U3")
