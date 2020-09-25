@@ -9,7 +9,7 @@ def poly_integral(poly, C=0):
         return None
     poly_clone = poly[:]
     poly_clone.insert(0, C)
-    for i in range(1, len(poly_clone)):
+    for i in range(len(poly_clone)):
         if (poly_clone[i] != 0):
             poly_clone[i] /= i
             if poly_clone[i] == int(poly_clone[i]):
