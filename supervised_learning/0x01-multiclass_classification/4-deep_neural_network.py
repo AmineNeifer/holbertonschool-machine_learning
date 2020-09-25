@@ -18,10 +18,8 @@ class DeepNeuralNetwork:
         if not isinstance(layers, list) or not layers:
             raise TypeError("layers must be a list of positive integers")
         if activation not in ('sig', 'tanh'):
-            raise ValueError("activatin must be 'sig' or 'tanh'")
-        self.__L = len(layers)
-        if activation not in ['sig', 'tanh']:
             raise ValueError("activation must be 'sig' or 'tanh'")
+        self.__L = len(layers)
         self.__activation = activation
         self.__cache = {}
         self.__weights = {}
