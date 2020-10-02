@@ -25,8 +25,9 @@ class Yolo():
     def process_outputs(self, outputs, image_size):
         """f sogmoid(x):
             return 1 / (1 + np.exp(-x))"""
-        inp_size = int(self.model.input.shape[1]) # darknet gets squared pictures
-        
+        inp_size = int(
+            self.model.input.shape[1])  # darknet gets squared pictures
+
         boxes = []
         box_c = []
         box_c_b = []
@@ -50,7 +51,7 @@ class Yolo():
                         th = box[cx, cy, j, 3]
                         bx = (self.sigmoid(tx) + cx) / grid_width
                         by = (self.sigmoid(ty) + cy) / grid_height
-                        
+
                         bw = a[0] * np.exp(tw) / inp_size
                         bh = a[1] * np.exp(th) / inp_size
                         box[cx, cy, j, 0] = (bx - bw / 2) * img_w
