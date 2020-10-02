@@ -77,7 +77,7 @@ class Yolo():
             box_classes.append(np.argmax(box_scores[i], axis=-1))
             box_class_scores.append(np.max(box_scores[i], axis=-1))
             filtering_mask = box_class_scores[i] >= self.class_t
-            scores += (box_class_scores[i][filtering_mask].tolist())
-            boxis += (boxes[i][filtering_mask].tolist())
-            classes += (box_classes[i][filtering_mask].tolist())
+            scores += (box_class_scores[i][filtering_mask].round(8).tolist())
+            boxis += (boxes[i][filtering_mask].round(8).tolist())
+            classes += (box_classes[i][filtering_mask].round(8).tolist())
         return boxis, classes, scores
