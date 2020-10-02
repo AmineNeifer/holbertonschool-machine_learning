@@ -55,6 +55,6 @@ class Yolo():
                         box[cx, cy, j, 2] = (bx + bw / 2) * img_w
                         box[cx, cy, j, 3] = (by + bh / 2) * img_h
             boxes.append(box)
-            box_c.append(self.sigmoid(output[:, :, :, 4, np.newaxis]))
+            box_c.append(self.sigmoid(output[:, :, :, 4:5]))
             box_c_b.append(self.sigmoid(output[:, :, :, 5:]))
         return boxes, box_c, box_c_b
