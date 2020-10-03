@@ -23,8 +23,7 @@ class Yolo():
         return 1 / (1 + np.exp(-x))
 
     def process_outputs(self, outputs, image_size):
-        """f sogmoid(x):
-           return 1 / (1 + np.exp(-x))"""
+        """it processes output"""
         inp_w = self.model.input.shape[1].value
         inp_h = self.model.input.shape[2].value
 
