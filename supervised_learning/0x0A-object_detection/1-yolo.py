@@ -24,9 +24,9 @@ class Yolo():
 
     def process_outputs(self, outputs, image_size):
         """f sogmoid(x):
-            return 1 / (1 + np.exp(-x))"""
-        inp_w = int(self.model.input.shape[1])
-        inp_h = int(self.model.input.shape[2])
+           return 1 / (1 + np.exp(-x))"""
+        inp_w = int(self.model.input.shape[2])
+        inp_h = int(self.model.input.shape[1])
 
         boxes = []
         box_c = []
@@ -52,8 +52,8 @@ class Yolo():
                         bx = (self.sigmoid(tx) + cx) / grid_width
                         by = (self.sigmoid(ty) + cy) / grid_height
 
-                        bw = a[0] * np.exp(tw) / inp_w
-                        bh = a[1] * np.exp(th) / inp_h
+                        bw = a[1] * np.exp(tw) / inp_w
+                        bh = a[0] * np.exp(th) / inp_h
                         box[cx, cy, j, 0] = (bx - bw / 2) * img_w
                         box[cx, cy, j, 1] = (by - bh / 2) * img_h
                         box[cx, cy, j, 2] = (bx + bw / 2) * img_w
