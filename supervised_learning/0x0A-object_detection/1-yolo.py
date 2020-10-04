@@ -41,7 +41,7 @@ class Yolo():
         for i in range(len(outputs)):
             grid_h = boxes[i].shape[0]
             grid_w = boxes[i].shape[1]
-            anchor = boxes[i].shape[2]
+            a = boxes[i].shape[2]
             anchor_w = self.anchors[i, :, 0]
             anchor_h = self.anchors[i, :, 1]
             tx = boxes[i][..., 0]
