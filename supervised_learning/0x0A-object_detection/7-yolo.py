@@ -7,6 +7,7 @@ import tensorflow as tf
 import numpy as np
 from glob import glob
 import cv2
+import os
 
 
 class Yolo():
@@ -114,3 +115,51 @@ class Yolo():
             )
         r = [x / 255 for x in r]
         return np.array(r), np.array(img_shapes)
+
+    def show_boxes(self, image, boxes, box_classes, box_scores, file_name):
+        """ displays boxes in the real pictures"""
+        c_names = self.class_names
+        for i in range(boxes.shape[0]):
+            # draw rectangles
+            box = boxes[i]
+            x1, y1, x2, y2 = map(int, box)
+            pt1 = (x1, y1)
+            pt2 = (x2, y2)
+            r_color = (255, 0, 0)
+            image = cv2.rectangle(image, pt1, pt2, color=r_color, thickness=2)
+            # draw text
+            b_score = np.around(box_scores, 2)[i]
+            class_name = c_names[box_classes[i]]
+            text = str(class_name) + " " + str(b_score)
+            pt3 = (x1, y1 - 5)
+            b_color = (0, 0, 255)
+            image = cv2.putText(
+                image,
+                text,
+                pt3,
+                cv2.FONT_HERSHEY_SIMPLEX,
+                0.5,
+                b_color,
+                1,
+                cv2.LINE_AA)
+        cv2.imshow(file_name, image)
+        k = cv2.waitKey(0)
+        if k == ord('s'):
+            os.mkdir("detections")
+            cv2.imwrite("detections/" + file_name, image)
+        cv2.destroyAllWindows()
+
+    def predict(self, folder_path):
+        """ all functions above"""
+        output1 = np.random.randn(13, 13, 3, 85)
+        output2 = np.random.randn(26, 26, 3, 85)
+        output3 = np.random.randn(52, 52, 3, 85)
+        for i in range(len(images)):
+            boxes, box_confidences, box_class_probs = yolo.process_outputs(
+                [output1, output2, output3], np.array([500, 700]))
+            boxes, box_classes, box_scores = yolo.filter_boxes(
+                boxes, box_confidences, box_class_probs)
+            boxes, box_classes, box_scores = yolo.non_max_suppression(
+                boxes, box_classes, box_scores)
+            images, image_paths = yolo.load_images(folder_path)
+            yolo.show_boxes(images[i], boxes, box_classes, box_scores, )

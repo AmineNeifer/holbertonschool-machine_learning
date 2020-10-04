@@ -30,44 +30,33 @@ class Yolo():
         """it processes output"""
         inp_w = self.model.input.shape[1].value
         inp_h = self.model.input.shape[2].value
-
         boxes = []
         box_c = []
-        box_c_b = []
+        box_c_p = []
         for output in outputs:
-            boxes.append(output[..., :4])
+            boxes.append(output[..., 0:4])
             box_c.append(self.sigmoid(output[..., 4:5]))
-            box_c_b.append(self.sigmoid(output[..., 5:]))
-
-        img_h = image_size[0]
+            box_c_p.append(self.sigmoid(output[..., 5:]))
         img_w = image_size[1]
-        input_h = self.model.input.shape[1].value
-        input_w = self.model.input.shape[2].value
+        img_h = image_size[0]
         for i in range(len(outputs)):
-
-            anchor = self.anchors[i]
-            a = anchor.shape[0]
-            anchor_w = anchor[:, 0]
-            anchor_h = anchor[:, 1]
             grid_h = boxes[i].shape[0]
             grid_w = boxes[i].shape[1]
-
+            a = boxes[i].shape[2]
+            anchor_w = self.anchors[i, :, 0]
+            anchor_h = self.anchors[i, :, 1]
             tx = boxes[i][..., 0]
             ty = boxes[i][..., 1]
             tw = boxes[i][..., 2]
             th = boxes[i][..., 3]
-
-            anchor_boxes = self.anchors
-            bounding_boxes = anchor_boxes[i]
-
             cx = np.indices((grid_h, grid_w, a))[1]
             cy = np.indices((grid_h, grid_w, a))[0]
-
             bx = (self.sigmoid(tx) + cx) / grid_w
             by = (self.sigmoid(ty) + cy) / grid_h
+            input_w = self.model.input.shape[1].value
+            input_h = self.model.input.shape[2].value
             bw = anchor_w * np.exp(tw) / input_w
             bh = anchor_h * np.exp(th) / input_h
-
             x1 = bx - bw / 2
             x2 = x1 + bw
             y1 = by - bh / 2
@@ -76,8 +65,7 @@ class Yolo():
             boxes[i][..., 1] = y1 * img_h
             boxes[i][..., 2] = x2 * img_w
             boxes[i][..., 3] = y2 * img_h
-
-        return boxes, box_c, box_c_b
+        return boxes, box_c, box_c_p
 
     def filter_boxes(self, boxes, box_confidences, box_class_probs):
         """ filter boxes """

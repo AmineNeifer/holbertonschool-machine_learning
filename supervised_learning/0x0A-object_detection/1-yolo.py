@@ -17,9 +17,11 @@ class Yolo():
         self.class_t = class_t
         self.nms_t = nms_t
         self.anchors = anchors
+
     def sigmoid(self, x):
         """sigmoid"""
         return (1 / (1 + np.exp(-x)))
+
     def process_outputs(self, outputs, image_size):
         """it processes output"""
         inp_w = self.model.input.shape[1].value
