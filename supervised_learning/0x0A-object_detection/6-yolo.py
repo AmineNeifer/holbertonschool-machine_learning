@@ -7,6 +7,7 @@ import tensorflow as tf
 import numpy as np
 from glob import glob
 import cv2
+import os
 
 
 class Yolo():
@@ -120,10 +121,42 @@ class Yolo():
         for a in images:
             img_shapes.append([a.shape[0], a.shape[1]])
             r.append(
-                cv2.resize(a, dsize=
-                    (input_w,
-                     input_h),
-                    interpolation=cv2.INTER_CUBIC)
-                )
+                cv2.resize(a, dsize=(input_w,
+                                     input_h),
+                           interpolation=cv2.INTER_CUBIC)
+            )
         r = [x / 255 for x in r]
         return np.array(r), np.array(img_shapes)
+
+    def show_boxes(self, image, boxes, box_classes, box_scores, file_name):
+        """ displays boxes in the real pictures"""
+        c_names = self.class_names
+        for i in range(boxes.shape[0]):
+            # draw rectangles
+            box = boxes[i]
+            x1, y1, x2, y2 = map(int, box)
+            pt1 = (x1, y1)
+            pt2 = (x2, y2)
+            r_color = (255, 0, 0)
+            image = cv2.rectangle(image, pt1, pt2, color=r_color, thickness=2)
+            # draw text
+            b_score = np.around(box_scores, 2)[i]
+            class_name = c_names[box_classes[i]]
+            text = str(class_name) + " " + str(b_score)
+            pt3 = (x1, y1 - 5)
+            b_color = (0, 0, 255)
+            image = cv2.putText(
+                image,
+                text,
+                pt3,
+                cv2.FONT_HERSHEY_SIMPLEX,
+                0.5,
+                b_color,
+                1,
+                cv2.LINE_AA)
+        cv2.imshow(file_name, image)
+        k = cv2.waitKey(0)
+        if k == ord('s'):
+            os.mkdir("detections")
+            cv2.imwrite("detections/" + file_name, image)
+        cv2.destroyAllWindows()
