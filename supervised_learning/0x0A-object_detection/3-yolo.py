@@ -84,3 +84,92 @@ class Yolo():
         boxis = np.array(boxis)
         classes = np.array(classes)
         return boxis, classes, scores
+
+    def iou(self,box1, box2):
+        """ calculates intersection over union of two boxes"""
+        x1 = max(box1[0], box2[0])
+        x2 = max(box1[2], box2[2])
+        y1 = min(box1[1], box2[1])
+        y2 = min(box1[3], box2[3])
+        
+        intersection = max(x2 - x1, 0) * max(y2 - y1, 0)
+
+        box1_area = (box1[2] - box1[0]) * (box1[3] - box1[1])
+        box2_area = (box2[2] - box2[0]) * (box2[3] - box2[1])
+        
+        union = box1_area + box2_area - intersection
+        return intersection / union
+
+    def non_max_suppression(self, bounding_boxes, box_classes, confidence_score):
+        # Bounding boxes
+        boxes = bounding_boxes
+
+        # coordinates of bounding boxes
+        start_x = boxes[:, 0]
+        start_y = boxes[:, 1]
+        end_x = boxes[:, 2]
+        end_y = boxes[:, 3]
+
+        # Confidence scores of bounding boxes
+        score = confidence_score
+
+        # Picked bounding boxes
+        picked_boxes = []
+        picked_score = []
+
+        # Compute areas of bounding boxes
+        areas = (end_x - start_x + 1) * (end_y - start_y + 1)
+
+        # Sort by confidence score of bounding boxes
+        order = np.lexsort((box_classes,score))
+
+        # Iterate bounding boxes
+        while order.size > 0:
+            # The index of largest confidence score
+            index = order[-1]
+
+            # Pick the bounding box with largest confidence score
+            picked_boxes.append(bounding_boxes[index])
+            picked_score.append(confidence_score[index])
+
+            # Compute ordinates of intersection-over-union(IOU)
+            x1 = np.maximum(start_x[index], start_x[order[:-1]])
+            x2 = np.minimum(end_x[index], end_x[order[:-1]])
+            y1 = np.maximum(start_y[index], start_y[order[:-1]])
+            y2 = np.minimum(end_y[index], end_y[order[:-1]])
+
+            # Compute areas of intersection-over-union
+            w = np.maximum(0.0, x2 - x1 + 1)
+            h = np.maximum(0.0, y2 - y1 + 1)
+            intersection = w * h
+
+            # Compute the ratio between intersection and union
+            ratio = intersection / (areas[index] + areas[order[:-1]] - intersection)
+
+            left = np.where(ratio < self.nms_t)
+            order = order[left]
+
+        return np.array(picked_boxes), None, np.array(picked_score)
+        """ non max suppression, it deletes the box that we've no need for"""
+        """pick = []
+        boxes = filtered_boxes
+        classes = box_classes
+        scores = box_scores
+        
+        idxs = np.lexsort((-scores, classes))
+        #boxes = boxes[idxs,:]
+        #classes = classes[idxs]
+        #scores = scores[idxs]
+
+        while len(idxs) > 0:
+            last = len(idxs) - 1
+            i = idxs[last]
+            pick.append(i)
+            suppress = [last]
+            for pos in range(last):
+                j = idxs[pos]
+                if self.iou(boxes[i,:], boxes[j,:]) > self.nms_t:
+                    suppress.append(pos)
+            idxs = np.delete(idxs, suppress)
+        return boxes[pick], classes[pick], scores[pick]"""
+ 
