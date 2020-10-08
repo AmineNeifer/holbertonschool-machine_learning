@@ -34,11 +34,10 @@ def load_csv(csv_path, params={}):
 
 def save_images(path, images, filenames):
     """ saves images to a specific path"""
-    for filename, image in zip(filenames, images):
-        name = path + "/" + filename
-        if image is None:
-            return False
-        stat = cv2.imwrite(name, cv2.cvtColor(image, code=cv2.COLOR_RGB2BGR))
-        if stat is False:
-            return False
+    try:
+        for filename, image in zip(filenames, images):
+            name = path + "/" + filename
+            stat = cv2.imwrite(name, cv2.cvtColor(image, code=cv2.COLOR_RGB2BGR))
+    except BaseException:
+        return False
     return True
