@@ -1,5 +1,7 @@
 #!/usr/bin/env python3
 
+""" class FaceAlign"""
+
 import dlib
 import numpy as np
 import cv2
