@@ -6,6 +6,7 @@ from glob import glob
 import numpy as np
 import csv
 
+
 def load_images(images_path, as_array=True):
     """ loads images using cv2 in RGB"""
     images = []
@@ -29,6 +30,7 @@ def load_csv(csv_path, params={}):
         for line in csv_r:
             triplets.append(line)
     return triplets
+
 
 def save_images(path, images, filenames):
     """ saves images to a specific path"""
