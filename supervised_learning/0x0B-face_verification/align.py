@@ -9,6 +9,7 @@ class FaceAlign:
     """ class for align faces for a better face averaging"""
 
     def __init__(self, shape_predictor_path):
+        """ class constructor"""
         self.detector = dlib.get_frontal_face_detector()
         self.shape_predictor = dlib.shape_predictor(shape_predictor_path)
 
