@@ -37,7 +37,9 @@ def save_images(path, images, filenames):
     try:
         for filename, image in zip(filenames, images):
             name = path + "/" + filename
-            stat = cv2.imwrite(name, cv2.cvtColor(image, code=cv2.COLOR_RGB2BGR))
+            stat = cv2.imwrite(
+                name, cv2.cvtColor(
+                    image, code=cv2.COLOR_RGB2BGR))
     except BaseException:
         return False
-    return True
+    return stat
