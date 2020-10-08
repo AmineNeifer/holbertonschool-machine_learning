@@ -46,17 +46,18 @@ class FaceAlign:
 
     def find_landmarks(self, image, detection):
         """ finds facial landmarks"""
-        x1, y1, x2, y2 = self.rect_to_bb(detection)
-        rec = dlib.rectangle(
-            left=int(x1),
-            top=int(y1),
-            right=int(x2),
-            bottom=int(y2))
-        dlib_landmarks = self.shape_predictor(image, rec)
-        shape = self.shape_to_np(dlib_landmarks)
-        # for (x, y) in shape:
-        #    image = cv2.circle(image, (x, y), 1, (0, 0, 255), -1)
-        return shape
+        try:
+            x1, y1, x2, y2 = self.rect_to_bb(detection)
+            rec = dlib.rectangle(
+                left=int(x1),
+                top=int(y1),
+                right=int(x2),
+                bottom=int(y2))
+            dlib_landmarks = self.shape_predictor(image, rec)
+            shape = self.shape_to_np(dlib_landmarks)
+            return shape
+        except BaseException:
+            return None
 
     def align(self, image, landmark_indices, anchor_points, size=96):
         """ aligns an image for face verification"""
