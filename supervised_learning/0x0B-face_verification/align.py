@@ -17,7 +17,7 @@ class FaceAlign:
         dets = self.detector(image, 1)
         init_area = 0
         if not dets:
-            return None
+            return dlib.rectangle(0, 0, image.shape[1], image.shape[0])
         for det in dets:
             area = (int(det.left()) - int(det.right())) * \
                 (int(det.top()) - int(det.bottom()))
@@ -54,3 +54,14 @@ class FaceAlign:
         # for (x, y) in shape:
         #    image = cv2.circle(image, (x, y), 1, (0, 0, 255), -1)
         return shape
+
+    def align(self, image, landmark_indices, anchor_points, size=96):
+        """ aligns an image for face verification"""
+        landmarks = self.find_landmarks(image, self.detect(image))
+        if landmarks is None:
+            return None
+        inp = np.array(landmarks[landmark_indices], dtype=np.float32)
+        anchor = anchor_points * size
+        warp_mat = cv2.getAffineTransform(inp, anchor)
+        warp_dst = cv2.warpAffine(image, warp_mat, (size, size))
+        return warp_dst

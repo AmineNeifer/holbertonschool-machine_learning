@@ -19,6 +19,19 @@ def load_images(images_path, as_array=True):
 
 
 def load_csv(csv_path, params={}):
+    """ loads triplets of names from csv file"""
     with open(csv_path, **params) as f:
         triplets = [x.split(',') for x in f.read().split('\n')[:-1]]
     return triplets
+
+
+def save_images(path, images, filenames):
+    """ saves images to a specific path"""
+    for filename, image in zip(filenames, images):
+        name = path + "/" + filename
+        if image is None:
+            return False
+        stat = cv2.imwrite(name, cv2.cvtColor(image, code=cv2.COLOR_RGB2BGR))
+        if stat is False:
+            return False
+    return True
