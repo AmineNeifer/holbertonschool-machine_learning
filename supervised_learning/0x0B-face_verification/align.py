@@ -47,7 +47,7 @@ class FaceAlign:
     def find_landmarks(self, image, detection):
         """ finds facial landmarks"""
         try:
-            """x1, y1, x2, y2 = self.rect_to_bb(detection)
+            x1, y1, x2, y2 = self.rect_to_bb(detection)
             rec = dlib.rectangle(
                 left=int(x1),
                 top=int(y1),
@@ -55,12 +55,7 @@ class FaceAlign:
                 bottom=int(y2))
             dlib_landmarks = self.shape_predictor(image, rec)
             shape = self.shape_to_np(dlib_landmarks)
-            return shape"""
-            shape = self.shape_predictor(image, detection)
-            coords = np.zeros((68, 2), dtype="int")
-            for i in range(0, 68):
-                coords[i] = [shape.part(i).x, shape.part(i).y]
-            return coords
+            return shape
         except BaseException:
             return None
 
