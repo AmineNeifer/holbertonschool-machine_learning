@@ -4,7 +4,7 @@
 import cv2
 from glob import glob
 import numpy as np
-
+import csv
 
 def load_images(images_path, as_array=True):
     """ loads images using cv2 in RGB"""
@@ -20,10 +20,15 @@ def load_images(images_path, as_array=True):
 
 def load_csv(csv_path, params={}):
     """ loads triplets of names from csv file"""
-    with open(csv_path, **params) as f:
+    """with open(csv_path, **params) as f:
         triplets = [x.split(',') for x in f.read().split('\n')[:-1]]
+    return triplets"""
+    triplets = []
+    with open(csv_path, 'r') as f:
+        csv_r = csv.reader(f, **params)
+        for line in csv_r:
+            triplets.append(line)
     return triplets
-
 
 def save_images(path, images, filenames):
     """ saves images to a specific path"""
