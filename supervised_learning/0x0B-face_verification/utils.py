@@ -40,6 +40,6 @@ def save_images(path, images, filenames):
             stat = cv2.imwrite(
                 name, cv2.cvtColor(
                     image, code=cv2.COLOR_RGB2BGR))
-    except BaseException:
+    except Exception as e:
         return False
     return stat
