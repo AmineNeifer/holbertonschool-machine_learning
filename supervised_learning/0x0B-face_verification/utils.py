@@ -54,13 +54,10 @@ def generate_triplets(images, filenames, triplet_names):
     P = np.zeros((m, n, n, 3))
     N = np.zeros((m, n, n, 3))
     for i in range(m):
-        try:
-            idx = filenames.index(triplet_names[i][0] + ".jpg")
-            idx1 = filenames.index(triplet_names[i][1] + ".jpg")
-            idx2 = filenames.index(triplet_names[i][2] + ".jpg")
-            A[i] = np.array(images[idx] / 255)
-            P[i] = np.array(images[idx1] / 255)
-            N[i] = np.array(images[idx2] / 255)
-        except ValueError:
-            continue
+        idx = filenames.index(triplet_names[i][0] + ".jpg")
+        idx1 = filenames.index(triplet_names[i][1] + ".jpg")
+        idx2 = filenames.index(triplet_names[i][2] + ".jpg")
+        A[i] = np.array(images[idx] / 255)
+        P[i] = np.array(images[idx1] / 255)
+        N[i] = np.array(images[idx2] / 255)
     return [A, P, N]
