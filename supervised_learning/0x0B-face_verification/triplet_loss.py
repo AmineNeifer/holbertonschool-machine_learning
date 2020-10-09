@@ -23,3 +23,9 @@ class TripletLoss(K.layers.Layer):
         pos_dist = tf.reduce_sum(tf.square(anchor - positive), axis=1)
         neg_dist = tf.reduce_sum(tf.square(anchor - negative), axis=1)
         return tf.maximum(pos_dist - neg_dist + self.alpha, 0.)
+
+    def call(self, inputs):
+        """ returns the triplet loss tensor"""
+        losses = self.triplet_loss(inputs)
+        self.add_loss(losses)
+        return losses
