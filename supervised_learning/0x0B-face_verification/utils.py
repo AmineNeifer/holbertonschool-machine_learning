@@ -15,7 +15,7 @@ def load_images(images_path, as_array=True):
         images.append(cv2.cvtColor(cv2.imread(path), code=cv2.COLOR_BGR2RGB))
         filenames.append(path.split("/")[-1])
     if as_array is True:
-        images = np.array(images)
+        images = np.asarray(images)
     return images, filenames
 
 
@@ -43,3 +43,24 @@ def save_images(path, images, filenames):
     except Exception as e:
         return False
     return stat
+
+
+def generate_triplets(images, filenames, triplet_names):
+    """ generate triplets from triplets of names"""
+    i = 0
+    m = len(triplet_names)
+    n = images.shape[1]
+    A = np.zeros((m, n, n, 3))
+    P = np.zeros((m, n, n, 3))
+    N = np.zeros((m, n, n, 3))
+    for i in range(m):
+        try:
+            idx = filenames.index(triplet_names[i][0] + ".jpg")
+            idx1 = filenames.index(triplet_names[i][1] + ".jpg")
+            idx2 = filenames.index(triplet_names[i][2] + ".jpg")
+            A[i] = np.array(images[idx] / 255)
+            P[i] = np.array(images[idx1] / 255)
+            N[i] = np.array(images[idx2] / 255)
+        except ValueError:
+            continue
+    return [A, P, N]
