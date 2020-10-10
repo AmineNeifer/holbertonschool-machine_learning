@@ -87,17 +87,15 @@ class Yolo():
 
     def iou(self, box1, box2):
         """ calculates intersection over union of two boxes"""
-        x1 = max(box1[0], box2[0])
-        x2 = max(box1[0] + box1[2], box2[2] + box2[2])
-        y1 = min(box1[1], box2[1])
-        y2 = min(box1[1] + box1[3], box2[1] + box2[3])
-
-        intersection = max(x2 - x1, 0) * max(y2 - y1, 0)
-
-        box1_area = (box1[2] - box1[0]) * (box1[3] - box1[1])
-        box2_area = (box2[2] - box2[0]) * (box2[3] - box2[1])
-        union = box1_area + box2_area - intersection
-        return intersection / union
+        x1, y1, w1, h1 = box1
+        x2, y2, w2, h2 = box2
+        w_intersection = min(x1 + w1, x2 + w2) - max(x1, x2)
+        h_intersection = min(y1 + h1, y2 + h2) - max(y1, y2)
+        if w_intersection <= 0 or h_intersection <= 0: # No overlap
+            return 0
+        I = w_intersection * h_intersection
+        U = w1 * h1 + w2 * h2 - I # Union = Total Area - I
+        return I / U
 
     def non_max_suppression(self, filtered_boxes, box_classes, box_scores):
         """ non max suppression, it deletes the box that we've no need for"""
