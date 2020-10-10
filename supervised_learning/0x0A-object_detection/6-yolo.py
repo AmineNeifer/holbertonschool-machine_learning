@@ -88,6 +88,38 @@ class Yolo():
         classes = np.array(classes)
         return boxis, classes, scores
 
+    def iou(self, box1, box2):
+        """ calculates intersection over union of two boxes"""
+        x1, y1, w1, h1 = box1
+        x2, y2, w2, h2 = box2
+        w_intersection = min(x1 + w1, x2 + w2) - max(x1, x2)
+        h_intersection = min(y1 + h1, y2 + h2) - max(y1, y2)
+        if w_intersection <= 0 or h_intersection <= 0:  # No overlap
+            return 0
+        inter = w_intersection * h_intersection
+        union = w1 * h1 + w2 * h2 - inter  # Union = Total Area - I
+        return inter / union
+
+    def non_max_suppression(self, filtered_boxes, box_classes, box_scores):
+        """ non max suppression, it deletes the box that we've no need for"""
+        pick = []
+
+        idxs = np.lexsort((box_scores, -box_classes))
+
+        while len(idxs) > 0:
+            last = len(idxs) - 1
+            i = idxs[last]
+            pick.append(i)
+            suppress = [last]
+            for pos in range(last):
+                j = idxs[pos]
+                if box_classes[i] == box_classes[j]:
+                    if self.iou(filtered_boxes[i],
+                                filtered_boxes[j]) > self.nms_t:
+                        suppress.append(pos)
+            idxs = np.delete(idxs, suppress)
+        return filtered_boxes[pick], box_classes[pick], box_scores[pick]
+
     def load_images(self, folder_path):
         """ loads images using cv2"""
         images = []
