@@ -178,8 +178,12 @@ class Yolo():
         k = cv2.waitKey(0)
         if k == ord('s'):
             os.mkdir("detections")
-            cv2.imwrite("detections/" + file_name, image)
+            try:
+                cv2.imwrite("detections/" + file_name, image)
+            except FileExistsError:
+                pass
         cv2.destroyAllWindows()
+
     def predict(self, folder_path):
         """ all functions above"""
         """images, images_paths = self.load_images(folder_path)
@@ -192,10 +196,10 @@ class Yolo():
         for i in range(len(images)):
             boxes, box_confidences, box_class_probs = yolo.process_outputs(
                 [output1, output2, output3], np.array([500, 700]))
-            
+
             boxes, box_classes, box_scores = yolo.filter_boxes(
                 boxes, box_confidences, box_class_probs)
-            
+
             boxes, box_classes, box_scores = yolo.non_max_suppression(
                 boxes, box_classes, box_scores)
             images, image_paths = yolo.load_images(folder_path)
@@ -206,9 +210,14 @@ class Yolo():
         preds = []
         for i in range(pimages.shape[0]):
             outs = [output[i] for output in outputs]
-            boxes, box_confidences, box_class_probs = (self.process_outputs(outs,image_shapes[i]))
-            boxes, box_classes, box_scores = (self.filter_boxes(boxes, box_confidences, box_class_probs))
-            boxes, box_classes, box_scores = (self.non_max_suppression(boxes, box_classes, box_scores))
+            boxes, box_confidences, box_class_probs = (
+                self.process_outputs(outs, image_shapes[i]))
+            boxes, box_classes, box_scores = (
+                self.filter_boxes(
+                    boxes, box_confidences, box_class_probs))
+            boxes, box_classes, box_scores = (
+                self.non_max_suppression(
+                    boxes, box_classes, box_scores))
             f_name = image_paths[i].split('/')[-1]
             preds.append((boxes, box_classes, box_scores))
             self.show_boxes(images[i], boxes, box_classes, box_scores, f_name)

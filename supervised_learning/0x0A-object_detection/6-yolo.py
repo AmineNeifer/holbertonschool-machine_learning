@@ -178,5 +178,8 @@ class Yolo():
         k = cv2.waitKey(0)
         if k == ord('s'):
             os.mkdir("detections")
-            cv2.imwrite("detections/" + file_name, image)
+            try:
+                cv2.imwrite("detections/" + file_name, image)
+            except FileExistsError:
+                pass
         cv2.destroyAllWindows()
