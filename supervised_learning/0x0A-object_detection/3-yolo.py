@@ -85,39 +85,25 @@ class Yolo():
         classes = np.array(classes)
         return boxis, classes, scores
 
-    """def iou(self,box1, box2):
-        "" calculates intersection over union of two boxes""
+    def iou(self, box1, box2):
+        """ calculates intersection over union of two boxes"""
         x1 = max(box1[0], box2[0])
-        x2 = max(box1[2], box2[2])
+        x2 = max(box1[0] + box1[2], box2[2] + box2[2])
         y1 = min(box1[1], box2[1])
-        y2 = min(box1[3], box2[3])
-        
+        y2 = min(box1[1] + box1[3], box2[1] + box2[3])
+
         intersection = max(x2 - x1, 0) * max(y2 - y1, 0)
 
         box1_area = (box1[2] - box1[0]) * (box1[3] - box1[1])
         box2_area = (box2[2] - box2[0]) * (box2[3] - box2[1])
-        
         union = box1_area + box2_area - intersection
-        return intersection / union"""
-    def iou(self, box1, box2):
-        """ Intersection over union """
-        x1, y1, w1, h1 = box1
-        x2, y2, w2, h2 = box2
-        w_intersection = min(x1 + w1, x2 + w2) - max(x1, x2)
-        h_intersection = min(y1 + h1, y2 + h2) - max(y1, y2)
-        if w_intersection <= 0 or h_intersection <= 0:  # No overlap
-            return 0
-        i = w_intersection * h_intersection
-        u = w1 * h1 + w2 * h2 - i  # Union = Total Area - I
-        return i / u
+        return intersection / union
+
     def non_max_suppression(self, filtered_boxes, box_classes, box_scores):
         """ non max suppression, it deletes the box that we've no need for"""
         pick = []
-        boxes = filtered_boxes
-        classes = box_classes
-        scores = box_scores
-        
-        idxs = np.lexsort((scores, -classes))
+
+        idxs = np.lexsort((box_scores, -box_classes))
 
         while len(idxs) > 0:
             last = len(idxs) - 1
@@ -126,7 +112,8 @@ class Yolo():
             suppress = [last]
             for pos in range(last):
                 j = idxs[pos]
-                if (self.iou(boxes[i], boxes[j]) > self.nms_t):
+                if box_classes[i] == box_classes[j] and (
+                        self.iou(filtered_boxes[i], filtered_boxes[j]) > self.nms_t):
                     suppress.append(pos)
             idxs = np.delete(idxs, suppress)
-        return boxes[pick], classes[pick], scores[pick]
+        return filtered_boxes[pick], box_classes[pick], box_scores[pick]
