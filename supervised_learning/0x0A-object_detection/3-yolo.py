@@ -94,9 +94,9 @@ class Yolo():
         h_intersection = min(y1 + h1, y2 + h2) - max(y1, y2)
         if w_intersection <= 0 or h_intersection <= 0:  # No overlap
             return 0
-        I = w_intersection * h_intersection
-        U = w1 * h1 + w2 * h2 - I  # Union = Total Area - I
-        return I / U
+        inter = w_intersection * h_intersection
+        union = w1 * h1 + w2 * h2 - inter  # Union = Total Area - I
+        return inter / union
 
     def non_max_suppression(self, filtered_boxes, box_classes, box_scores):
         """ non max suppression, it deletes the box that we've no need for"""
@@ -111,8 +111,9 @@ class Yolo():
             suppress = [last]
             for pos in range(last):
                 j = idxs[pos]
-                if box_classes[i] == box_classes[j] and (
-                        self.iou(filtered_boxes[i], filtered_boxes[j]) > self.nms_t):
-                    suppress.append(pos)
+                if box_classes[i] == box_classes[j]:
+                    if self.iou(filtered_boxes[i],
+                                filtered_boxes[j]) > self.nms_t:
+                        suppress.append(pos)
             idxs = np.delete(idxs, suppress)
         return filtered_boxes[pick], box_classes[pick], box_scores[pick]
