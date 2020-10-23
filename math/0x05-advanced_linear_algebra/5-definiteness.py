@@ -14,6 +14,8 @@ def definiteness(matrix):
         return None
     if matrix.shape[0] != matrix.shape[1]:
         return None
+    if not np.allclose(matrix, matrix.T):
+        return None
     x = matrix
     if np.all(np.linalg.eigvals(x) > 0):
         return "Positive definite"
