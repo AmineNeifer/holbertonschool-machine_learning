@@ -23,7 +23,7 @@ def definiteness(matrix):
         return "Negative definite"
     elif np.all(np.linalg.eigvals(x) <= 0):
         return "Negative semi-definite"
-    elif np.linalg.det(matrix) != 0:
+    elif np.all(np.linalg.eigvals(x) != 0):
         return "Indefinite"
     else:
         return None
