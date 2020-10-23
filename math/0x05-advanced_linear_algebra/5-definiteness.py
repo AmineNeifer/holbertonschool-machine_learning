@@ -10,6 +10,8 @@ def definiteness(matrix):
         raise TypeError("matrix must be a numpy.ndarray")
     if matrix.size == 0:
         return None
+    if len(matrix.shape) != 2:
+        return None
     if matrix.shape[0] != matrix.shape[1]:
         return None
     x = matrix
@@ -23,4 +25,4 @@ def definiteness(matrix):
         return "Negative semi-definite"
     # elif np.all(np.linalg.eigvals(x) == 0):
     else:
-        return "Indifinite"
+        return "Indefinite"
