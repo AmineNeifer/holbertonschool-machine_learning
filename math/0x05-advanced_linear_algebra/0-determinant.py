@@ -5,17 +5,17 @@
 
 def determinant(matrix):
     """ return the determinant of matrix"""
-    if not isinstance(matrix, list):
-        raise TypeError("matrix must be a list of lists")
-    if not matrix:
-        raise TypeError("matrix must be a list of lists")
-    for item in matrix:
-        if not isinstance(item, list):
-            raise TypeError("matrix must be a list of lists")
-    if matrix == [[]]:
-        return 1
-    elif len(matrix) != len(matrix[0]):
-        raise ValueError("matrix must be a square matrix")
+    # if not isinstance(matrix, list):
+    #     raise TypeError("matrix must be a list of lists")
+    # if not matrix:
+    #     raise TypeError("matrix must be a list of lists")
+    # for item in matrix:
+    #     if not isinstance(item, list):
+    #         raise TypeError("matrix must be a list of lists")
+    # if matrix == [[]]:
+    #     return 1
+    # elif len(matrix) != len(matrix[0]):
+    #     raise ValueError("matrix must be a square matrix")
 
     mat = [a[:] for a in matrix[:]]
     return det_helper(mat)
