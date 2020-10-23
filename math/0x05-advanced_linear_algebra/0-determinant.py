@@ -18,7 +18,7 @@ def determinant(matrix):
         raise ValueError("matrix must be a square matrix")
     for item in matrix:
         for val in item:
-            if not isinstance(val, int):
+            if not isinstance(val, int) or not isinstance(val, float):
                 raise ValueError("matrix must be a square matrix")
 
     mat = [a[:] for a in matrix[:]]
