@@ -20,7 +20,7 @@ def minor(matrix):
     return mat
 
 
-def determinant(matrix):
+def det(matrix):
     """ return the determinant of matrix"""
     if not isinstance(matrix, list):
         raise TypeError("matrix must be a list of lists")
