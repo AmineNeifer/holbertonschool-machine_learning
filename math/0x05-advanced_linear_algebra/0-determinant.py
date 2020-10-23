@@ -16,6 +16,10 @@ def determinant(matrix):
         return 1
     elif len(matrix) != len(matrix[0]):
         raise ValueError("matrix must be a square matrix")
+    for item in matrix:
+        for val in item:
+            if not isinstance(val, int):
+                raise ValueError("matrix must be a square matrix")
 
     mat = [a[:] for a in matrix[:]]
     return det_helper(mat)
