@@ -35,15 +35,6 @@ def cofactor(matrix):
 
 def minor(matrix):
     """ takes a matrix and returns it's minor"""
-    if not isinstance(matrix, list):
-        raise TypeError("matrix must be a list of lists")
-    if not matrix:
-        raise TypeError("matrix must be a list of lists")
-    for item in matrix:
-        if len(item) != len(matrix):
-            raise ValueError("matrix must be a non-empty square matrix")
-        if not isinstance(item, list):
-            raise TypeError("matrix must be a list of lists")
 
     if len(matrix) == 1:
         return [[1]]
@@ -66,9 +57,11 @@ def det(matrix):
             raise TypeError("matrix must be a list of lists")
     if matrix == [[]]:
         return 1
-    elif len(matrix) != len(matrix[0]):
-        raise ValueError("matrix must be a square matrix")
-
+    for item in matrix:
+        if len(item) != len(matrix):
+            raise ValueError("matrix must be a non-empty square matrix")
+        if not isinstance(item, list):
+            raise TypeError("matrix must be a list of lists")
     mat = [a[:] for a in matrix[:]]
     return det_helper(mat)
 
