@@ -27,9 +27,9 @@ def minor(matrix):
         raise TypeError("matrix must be a list of lists")
     if not matrix:
         raise TypeError("matrix must be a list of lists")
-    elif len(matrix) != len(matrix[0]):
-        raise ValueError("matrix must be a square matrix")
     for item in matrix:
+        if len(item) != len(matrix):
+            raise ValueError("matrix must be a non-empty square matrix")
         if not isinstance(item, list):
             raise TypeError("matrix must be a list of lists")
 
@@ -45,18 +45,6 @@ def minor(matrix):
 
 def det(matrix):
     """ return the determinant of matrix"""
-    if not isinstance(matrix, list):
-        raise TypeError("matrix must be a list of lists")
-    if not matrix:
-        raise TypeError("matrix must be a list of lists")
-    for item in matrix:
-        if not isinstance(item, list):
-            raise TypeError("matrix must be a list of lists")
-    if matrix == [[]]:
-        return 1
-    elif len(matrix) != len(matrix[0]):
-        raise ValueError("matrix must be a square matrix")
-
     mat = [a[:] for a in matrix[:]]
     return det_helper(mat)
 
