@@ -19,11 +19,11 @@ class MultiNormal:
 
     def pdf(self, x):
         """ pdf at a data point"""
+        d = x.shape[0]
         if not isinstance(x, np.ndarray):
             raise TypeError("x must be a numpy.ndarray")
         if len(x.shape) != 2 or x.shape[1] != 1:
             raise ValueError("x must have the shape ({}, 1)".format(d))
-        d = x.shape[0]
         m = self.mean
         E = np.linalg.det(self.cov)
         inv = np.linalg.inv(self.cov)
