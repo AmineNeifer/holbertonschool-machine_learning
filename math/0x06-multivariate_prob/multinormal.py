@@ -15,3 +15,15 @@ class MultiNormal:
         self.mean = np.mean(data, axis=1, keepdims=True)
         self.cov = np.matmul((data - self.mean),
                              (data - self.mean).T) / (data.shape[1] - 1)
+        self.data = data
+
+    def pdf(self, x):
+        """ pdf at a data point"""
+        d = x.shape[0]
+        m = self.mean
+        E = np.linalg.det(self.cov)
+        inv = np.linalg.inv(self.cov)
+        denom = 1 / ((((2 * np.pi) ** (d)) * E) ** 0.5)
+        nominator = np.exp(- 0.5 *
+                           np.matmul(np.matmul((x - m).T, inv), (x - m)))
+        return (nominator * denom)[0][0]
