@@ -6,6 +6,8 @@
 
 def inverse(matrix):
     """ calculates inverse of matrix"""
+    if matrix == [[]]:
+        raise ValueError("matrix must be a non-empty square matrix")
     determinant = det(matrix)
     if determinant == 0:
         return None
