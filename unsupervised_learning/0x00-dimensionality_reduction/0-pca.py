@@ -2,6 +2,7 @@
 """ pca """
 import numpy as np
 
+
 def pca(X, var=0.95):
     """ pca yehi"""
     u, s, vh = np.linalg.svd(X)
