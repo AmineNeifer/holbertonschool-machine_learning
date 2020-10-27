@@ -2,6 +2,7 @@
 """ pca """
 import numpy as np
 
+
 def pca(X, ndim):
     """ pca yehi"""
     X_m = X - np.mean(X, axis=0)
