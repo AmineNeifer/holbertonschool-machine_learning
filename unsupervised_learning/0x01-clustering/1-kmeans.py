@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 
-
+""" functions to find kmean"""
 import numpy as np
 
 
@@ -39,7 +39,7 @@ def kmeans(X, k, iterations=1000):
     if iterations <= 0:
         return None, None
     closest = closest_centroid(X, cent)
-    for i in range(10):
+    for i in range(iterations):
         cp = np.copy(cent)
         for j in range(k):
             if X[np.where(closest == j)].size == 0:
