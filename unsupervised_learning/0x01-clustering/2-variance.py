@@ -4,6 +4,7 @@
 """ varaince intra-clusters"""
 import numpy as np
 
+
 def closest_centroid(points, centroids):
     """
     returns an array containing the idx to the nearest centroid for each nt
@@ -11,8 +12,11 @@ def closest_centroid(points, centroids):
     distances = np.sqrt(((points - centroids[:, np.newaxis])**2).sum(axis=2))
     return np.argmin(distances, axis=0)
 
+
 def variance(X, C):
-    """ total variance inntra-cluster"""
+    """
+    total variance inntra-cluster
+    """
     if not isinstance(X, np.ndarray):
         return None
     if len(X.shape) != 2:
