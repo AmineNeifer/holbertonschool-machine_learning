@@ -1,7 +1,8 @@
 #!/usr/bin/env python3
 
-
+""" contains a function that initializes centroids"""
 import numpy as np
+
 
 def initialize(X, k):
     """ initializes cluster centroids for K-means"""
