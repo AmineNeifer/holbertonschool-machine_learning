@@ -27,6 +27,7 @@ def pdf(X, m, S):
     nominator = np.exp(-(0.5) * np.matmul(f_matmul, (x - m).T))
     p = denom * nominator
     p = p * np.eye(p.shape[0], p.shape[1])
+    p = p[p != 0]
     p = p.flatten()
-    p = p[p > 1e-300]
+    p = np.where(p >= 1e-300, p, 1e-300)
     return p
