@@ -29,25 +29,25 @@ def closest_centroid(points, centroids):
     return np.argmin(distances, axis=0)
 
 
-def move_centroids(points, closest, centroids):
-    """returns the new centroids assigned from the points closest to them"""
-    return np.array([points[closest == k].mean(axis=0)
-                     for k in range(centroids.shape[0])])
-
-
 def kmeans(X, k, iterations=1000):
     """ kmeans algorithm"""
-    c = initialize(X, k)
-    i = 0
-    cent = initialize(X, k).copy()
+    cent = initialize(X, k)
+    if cent is None:
+        return None, None
+    if not isinstance(iterations, int):
+        return None, None
+    if iterations <= 0:
+        return None, None
+    closest = closest_centroid(X, cent)
     for i in range(10):
+        cp = np.copy(cent)
+        for j in range(k):
+            if X[np.where(closest == j)].size == 0:
+                cent[j] = initialize(X, 1)
+            else:
+                cent[j] = X[np.where(closest == j)].mean(axis=0)
         closest = closest_centroid(X, cent)
-        if np.isnan(cent).any():
-            cent = initialize(X, k).copy()
-        else:
-            cent = move_centroids(X, closest, cent)
-        #plt.scatter(X[:, 0], X[:, 1], s=10, c=closest)
-        #plt.scatter(cent[:, 0], cent[:, 1], s=50, marker='*', c=list(range(5)))
-        #plt.show()
+        if np.array_equal(cp, cent):
+            break
 
     return cent, closest
