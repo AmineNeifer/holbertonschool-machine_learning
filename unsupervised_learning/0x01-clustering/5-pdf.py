@@ -19,6 +19,7 @@ def pdf(X, m, S):
         return None
     if len(S.shape) != 2 or S.shape != (d, d):
         return None
+    np.seterr(all='ignore')
     x = X
     E = np.linalg.det(S)
     inv = np.linalg.inv(S)
@@ -26,7 +27,8 @@ def pdf(X, m, S):
     f_matmul = np.matmul((x - m), inv)
     nominator = np.exp(-(0.5) * np.matmul(f_matmul, (x - m).T))
     p = denom * nominator
-    p = p * np.eye(p.shape[0], p.shape[1])
+    eye = np.eye(p.shape[0], p.shape[1])
+    p = p * eye
     p = p[p != 0]
     p = p.flatten()
     p = np.where(p >= 1e-300, p, 1e-300)
