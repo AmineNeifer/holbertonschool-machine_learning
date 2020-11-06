@@ -2,7 +2,6 @@
 
 
 import numpy as np
-import matplotlib.pyplot as plt
 
 
 def initialize(X, k):
@@ -40,15 +39,15 @@ def kmeans(X, k, iterations=1000):
     """ kmeans algorithm"""
     c = initialize(X, k)
     i = 0
-
+    cent = initialize(X, k).copy()
     for i in range(10):
         closest = closest_centroid(X, cent)
         if np.isnan(cent).any():
             cent = initialize(X, k).copy()
         else:
             cent = move_centroids(X, closest, cent)
-        plt.scatter(X[:, 0], X[:, 1], s=10, c=closest)
-        plt.scatter(cent[:, 0], cent[:, 1], s=50, marker='*', c=list(range(5)))
-        plt.show()
+        #plt.scatter(X[:, 0], X[:, 1], s=10, c=closest)
+        #plt.scatter(cent[:, 0], cent[:, 1], s=50, marker='*', c=list(range(5)))
+        #plt.show()
 
     return cent, closest
