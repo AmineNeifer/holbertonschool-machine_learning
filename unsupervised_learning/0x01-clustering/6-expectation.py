@@ -7,7 +7,7 @@ pdf = __import__('5-pdf').pdf
 
 
 def expectation(X, pi, m, S):
-    """  EM algorithm for a GMM"""
+    """EM algorithm for a GMM"""
     if not isinstance(X, np.ndarray):
         return None, None
     if len(X.shape) != 2:
@@ -28,4 +28,4 @@ def expectation(X, pi, m, S):
         return None, None
     if len(S.shape) != 3 or S.shape != (k, d, d):
         return None, None
-    np.seterr(all="ignore")   
+    np.seterr(all="ignore")
