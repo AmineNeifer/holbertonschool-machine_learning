@@ -24,6 +24,8 @@ def regular(P):
     if (P < 0).any():
         return None
     n = P.shape[0]
+    if not ((P > 0).all() and (P <= 1).all()):
+        return None
     if not ((np.sum(P, axis=1) == np.ones((n))).all()).all():
         return None
     eig = np.linalg.eig(P)[0]
