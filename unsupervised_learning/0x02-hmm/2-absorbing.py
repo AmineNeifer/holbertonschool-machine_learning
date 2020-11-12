@@ -3,10 +3,11 @@
 """ contains absorbing function"""
 import numpy as np
 
+
 def look_for_ones(P):
     """
     looks for a column in which there is 1
-    Return: 
+    Return:
         True if there's a column with number 1 and sum over the column is >=1
         False otherwise
     """
@@ -15,8 +16,13 @@ def look_for_ones(P):
         if 1 in col:
             return True
     return False
+
+
 def absorbing_helper(P):
-    """ idk now"""
+    """
+    removes the part where we have the I O (from standard)
+    checks if it can lead to total absorbing
+    """
     mat = P.copy()
     for i in range(1, len(mat)):
         if not ((mat[:i, :i] == np.eye(i)).all()).all():
@@ -29,8 +35,8 @@ def absorbing_helper(P):
         if (nbr == (len(res) - 1)).all():
             return False
     return not (mat[i:, :i] == 0).all()
-        
-            
+
+
 def absorbing(P):
     """ determines if a markov chain is absorbing"""
     if not isinstance(P, np.ndarray):
