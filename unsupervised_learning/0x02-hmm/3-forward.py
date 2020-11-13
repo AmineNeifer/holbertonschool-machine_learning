@@ -6,9 +6,9 @@ import numpy as np
 
 
 def forward(Observation, Emission, Transition, Initial):
-    """ 
+    """
     performs the forward algorithm for a hidden markov model
-    
+
     A = Transition
     B = Emission
     Pi = Initial
@@ -39,6 +39,7 @@ def forward(Observation, Emission, Transition, Initial):
     for t in range(1, T):
         obs_index = Observation[t]
         for s in range(N):
-            F[s, t] = np.dot(F[:, t-1], Transition[:, s]) * Emission[s, Observation[t]]
-    P = np.sum(F[:, T-1], axis=0)
-    return P , F
+            F[s, t] = np.dot(F[:, t - 1], Transition[:, s]) * \
+                Emission[s, Observation[t]]
+    P = np.sum(F[:, T - 1], axis=0)
+    return P, F
