@@ -45,4 +45,4 @@ def viterbi(Observation, Emission, Transition, Initial):
         if D[i, T - 1] > omx:
             omx = D[i, T - 1]
 
-    return omx, S_opt
+    return S_opt, omx
