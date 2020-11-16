@@ -42,4 +42,4 @@ def regular(P):
     a = np.eye(n) - P
     a = np.vstack((a.T, np.ones(n)))
     b = np.matrix([0] * n + [1]).T
-    return np.linalg.lstsq(a, b)[0]
+    return np.linalg.lstsq(a, b)[0].T
