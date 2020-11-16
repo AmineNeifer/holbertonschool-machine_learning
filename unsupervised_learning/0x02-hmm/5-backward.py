@@ -35,7 +35,7 @@ def backward(Observation, Emission, Transition, Initial):
         return None, None
     B = np.zeros((N, T))
     B[:, T - 1] = np.ones((N))
-    for t in range(T - 2, -2, -1):
+    for t in range(T - 2, -1, -1):
         for s in range(N):
             tmp = B[:, t + 1] * Emission[:, Observation[t + 1]]
             B[s, t] = np.dot(tmp, Transition[s, :])
