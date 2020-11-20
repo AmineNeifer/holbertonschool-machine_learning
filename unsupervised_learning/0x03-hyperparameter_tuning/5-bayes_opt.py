@@ -53,5 +53,6 @@ class BayesianOptimization:
             index = np.argmin(self.gp.Y)
         else:
             index = np.argmax(self.gp.Y)
+        self.gp.X = np.delete(self.gp.X, -1).reshape((-1, 1))
 
         return self.gp.X[index], self.gp.Y[index]
