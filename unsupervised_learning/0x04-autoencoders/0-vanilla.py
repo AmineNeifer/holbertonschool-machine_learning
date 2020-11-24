@@ -31,5 +31,7 @@ def autoencoder(input_dims, hidden_layers, latent_dims):
     output_img = Dense(input_dims, activation="sigmoid")(hidden_4)
     auto = Model(input_img, output_img)
     
+    encoder = Model(input_img, hidden_2)
+    decoder = Model(Input((latent_dims,)), hidden_4)
     auto.compile(optimizer="adam", loss="binary_crossentropy")
-    return hidden_2 , hidden_4, auto
+    return encoder, decoder, auto
