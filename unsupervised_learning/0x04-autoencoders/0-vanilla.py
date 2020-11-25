@@ -32,6 +32,9 @@ def autoencoder(input_dims, hidden_layers, latent_dims):
     auto = Model(input_img, output_img)
     
     encoder = Model(input_img, hidden_2)
-    decoder = Model(Input((latent_dims,)), hidden_4)
+    
+    encoded_input = Input((hidden_layers[1],))
+    decoder = Model(input_img, hidden_4)
+    
     auto.compile(optimizer="adam", loss="binary_crossentropy")
     return encoder, decoder, auto
