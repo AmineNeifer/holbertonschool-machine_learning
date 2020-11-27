@@ -13,7 +13,7 @@ def autoencoder(input_dims, hidden_layers, latent_dims):
                     hidden layer in the encoder, respectivel
         -the hidden layers should be reversed for the decoder
     @latent_dims: int containing the dims of the latent space representation
-    
+
     Returns: encoder, decoder, auto
         @encoder is the encoder model
         @decoder is the decoder model
@@ -22,19 +22,22 @@ def autoencoder(input_dims, hidden_layers, latent_dims):
     Input = keras.Input
     Dense = keras.layers.Dense
     Model = keras.Model
+
     input_img = Input((input_dims,))
-    hidden_1 = Dense(hidden_layers[0], activation='relu')(input_img)
-    hidden_2 = Dense(hidden_layers[1], activation='relu')(hidden_1)
-    code = Dense(latent_dims, activation='relu')(hidden_2)
-    hidden_3 = Dense(hidden_layers[1], activation='relu')(code)
-    hidden_4 = Dense(hidden_layers[0], activation='relu')(hidden_3)
-    output_img = Dense(input_dims, activation="sigmoid")(hidden_4)
-    auto = Model(input_img, output_img)
-    
-    encoder = Model(input_img, hidden_2)
-    
-    encoded_input = Input((hidden_layers[1],))
-    decoder = Model(input_img, hidden_4)
-    
+    encoded = input_img
+    for hidden_layer in hidden_layers:
+        encoded = Dense(hidden_layer, activation='relu')(encoded)
+    encoded = Dense(latent_dims, activation='relu')(encoded)
+
+    encoded_img = Input((latent_dims,))
+    decoded = encoded_img
+    for hidden_layer in reversed(hidden_layers):
+        decoded = Dense(hidden_layer, activation='relu')(decoded)
+    decoded = Dense(input_dims, activation="sigmoid")(decoded)
+
+    encoder = Model(input_img, encoded)
+    decoder = Model(encoded_img, decoded)
+    out_decoder = decoder(encoder(input_img))
+    auto = Model(input_img, out_decoder)
     auto.compile(optimizer="adam", loss="binary_crossentropy")
     return encoder, decoder, auto
