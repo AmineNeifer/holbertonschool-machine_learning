@@ -33,12 +33,12 @@ def autoencoder(input_dims, filters, latent_dims):
 
     encoded_img = Input(latent_dims)
     decoded = encoded_img
-    for i in reversed(range(len(filters) - 1)):
+    for i in reversed(range(1, len(filters))):
         f = filters[i]
         decoded = Conv2D(f, (3, 3), activation='relu', padding='same')(decoded)
         decoded = UpSampling2D((2, 2))(decoded)
     decoded = Conv2D(
-        filters[i],
+        filters[0],
         (3,
          3),
         activation='relu',
