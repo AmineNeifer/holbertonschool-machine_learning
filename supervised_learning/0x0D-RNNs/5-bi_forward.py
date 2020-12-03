@@ -32,6 +32,8 @@ class BidirectionalCell:
 
     def forward(self, h_prev, x_t):
         """ feed forward algo for RNN"""
+        print("h_prev = " + str(h_prev.shape))
+        print("x_t = " + str(x_t.shape))
         conc = np.concatenate((h_prev, x_t), axis=1)
         h_next = np.tanh(conc.dot(self.Whf) + self.bhf)
         #y = self.softmax(h_next.dot(self.Wy) + self.by)
