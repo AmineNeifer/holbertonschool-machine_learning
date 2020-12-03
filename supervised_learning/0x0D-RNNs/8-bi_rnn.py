@@ -9,7 +9,7 @@ def bi_rnn(bi_cell, X, h_0, h_t):
     """
     Performs forward propagation for a bi RNN:
 
-    @bi_cell is an instance of BidirectionalCell that will be used for the forward prop
+    @bi_cell instance of BidirectionalCell will be use for forward prop
     @X is the data to be used, given as a numpy.ndarray of shape (t, m, i)
         @t is the maximum number of time steps
         @m is the batch size
@@ -30,10 +30,10 @@ def bi_rnn(bi_cell, X, h_0, h_t):
     times = T
     Hf[0] = h_0
     Hb[-1] = h_t
-    for t in range(1, T+1):
-        Hf[t]= bi_cell.forward(Hf[t - 1], X[t - 1])
+    for t in range(1, T + 1):
+        Hf[t] = bi_cell.forward(Hf[t - 1], X[t - 1])
     for t in reversed(range(T)):
-        Hb[t]= bi_cell.backward(Hb[t + 1], X[t])
+        Hb[t] = bi_cell.backward(Hb[t + 1], X[t])
 
     H = np.concatenate((Hf[1:], Hb[:-1]), axis=-1)
     Y = bi_cell.output(H)
