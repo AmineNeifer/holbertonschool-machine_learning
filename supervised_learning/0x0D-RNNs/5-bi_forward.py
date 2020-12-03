@@ -28,7 +28,7 @@ class BidirectionalCell:
 
     def softmax(self, x):
         """Compute softmax values for each sets of scores in x."""
-        return np.exp(x)/np.sum(np.exp(x), axis=1, keepdims=True)
+        return np.exp(x) / np.sum(np.exp(x), axis=1, keepdims=True)
 
     def forward(self, h_prev, x_t):
         """ feed forward algo for RNN"""
@@ -36,5 +36,4 @@ class BidirectionalCell:
         print("x_t = " + str(x_t.shape))
         conc = np.concatenate((h_prev, x_t), axis=1)
         h_next = np.tanh(conc.dot(self.Whf) + self.bhf)
-        #y = self.softmax(h_next.dot(self.Wy) + self.by)
         return h_next
