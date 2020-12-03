@@ -25,7 +25,7 @@ class RNNCell:
 
     def softmax(self, x):
         """Compute softmax values for each sets of scores in x."""
-        return np.exp(x)/np.sum(np.exp(x), axis=0)
+        return np.exp(x)/np.sum(np.exp(x), axis=1, keepdims=True)
 
     def forward(self, h_prev, x_t):
         """ feed forward algo for RNN"""
