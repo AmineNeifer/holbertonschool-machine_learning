@@ -28,14 +28,14 @@ class BidirectionalCell:
 
     def softmax(self, x):
         """Compute softmax values for each sets of scores in x."""
-        return np.exp(x)/np.sum(np.exp(x), axis=1, keepdims=True)
+        return np.exp(x) / np.sum(np.exp(x), axis=1, keepdims=True)
 
     def forward(self, h_prev, x_t):
         """ feed forward algo for bidirectional RNN"""
         conc = np.concatenate((h_prev, x_t), axis=1)
         h_next = np.tanh(conc.dot(self.Whf) + self.bhf)
-        #y = self.softmax(h_next.dot(self.Wy) + self.by)
         return h_next
+
     def backward(self, h_next, x_t):
         """ feed backward algo for bidirectional RNN"""
         conc = np.concatenate((h_next, x_t), axis=1)
