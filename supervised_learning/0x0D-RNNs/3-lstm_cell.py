@@ -14,7 +14,8 @@ class LSTMCell:
         @i is the dimensionality of the data
         @h is the dimensionality of the hidden state
         @o is the dimensionality of the outputs
-        - Creates the public instance attributes that represent the weights and biases of the cell
+        - Creates the public instance attributes that represent
+        the weights and biases of the cell
             @Wf and @bf are for the update gate
             @Wu and @bu are for the reset gate
             @Wc and @bc are for the intermediate hidden state
@@ -31,12 +32,15 @@ class LSTMCell:
         self.bc = np.zeros((1, h))
         self.bo = np.zeros((1, h))
         self.by = np.zeros((1, o))
+
     def sigmoid(self, x):
         """sigmoid fucntion"""
         return 1 / (1 + np.exp(-x))
+
     def softmax(self, x):
         """Compute softmax values for each sets of scores in x."""
-        return np.exp(x)/np.sum(np.exp(x), axis=1, keepdims=True)
+        return np.exp(x) / np.sum(np.exp(x), axis=1, keepdims=True)
+
     def forward(self, h_prev, c_prev, x_t):
         """
         Performs forward propagation for one time step
@@ -44,7 +48,7 @@ class LSTMCell:
                 m is the batche size for the data
             @h_prev is a np.ndarray(m, h) contains the prev hidden state
             @h_prev is a np.ndarray (m, h) contains the previous hidden state
-            
+
         Returns: h_next, y
             @h_next is the next hidden state
             @h_prev is the next cell state
