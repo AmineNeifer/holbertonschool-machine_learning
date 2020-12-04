@@ -7,6 +7,8 @@ import numpy as np
 
 
 class GRUCell:
+    """represents a cell of a GRU RNN"""
+
     def __init__(self, i, h, o):
         """
         Class constructor:

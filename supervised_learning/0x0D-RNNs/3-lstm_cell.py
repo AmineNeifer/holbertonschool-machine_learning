@@ -1,12 +1,13 @@
 #!/usr/bin/env python3
 
 """
-Contains class LSTMCell that represents a cell of a GRU RNN
+Contains class LSTMCell that represents a cell of a LTSM RNN
 """
 import numpy as np
 
 
 class LSTMCell:
+    """ represents a cell of a LTSM RNN"""
     def __init__(self, i, h, o):
         """
         Class constructor:
