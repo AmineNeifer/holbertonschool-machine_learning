@@ -7,6 +7,8 @@ import numpy as np
 
 
 class RNNCell:
+    """ represents a cell of a simple RNN"""
+
     def __init__(self, i, h, o):
         """
         Class constructor:
@@ -25,7 +27,7 @@ class RNNCell:
 
     def softmax(self, x):
         """Compute softmax values for each sets of scores in x."""
-        return np.exp(x)/np.sum(np.exp(x), axis=1, keepdims=True)
+        return np.exp(x) / np.sum(np.exp(x), axis=1, keepdims=True)
 
     def forward(self, h_prev, x_t):
         """ feed forward algo for RNN"""
