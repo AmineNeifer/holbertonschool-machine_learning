@@ -7,6 +7,7 @@ import numpy as np
 
 
 class BidirectionalCell:
+    """represents a bidirectional cell RNN"""
     def __init__(self, i, h, o):
         """
         Class constructor:
@@ -40,4 +41,4 @@ class BidirectionalCell:
         """ feed backward algo for bidirectional RNN"""
         conc = np.concatenate((h_next, x_t), axis=1)
         h_prev = np.tanh(conc.dot(self.Whb) + self.bhb)
-        return h_prev
+        return h_prevbidirectional cell RNN

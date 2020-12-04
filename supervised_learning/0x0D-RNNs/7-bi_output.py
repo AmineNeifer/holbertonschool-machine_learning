@@ -7,6 +7,7 @@ import numpy as np
 
 
 class BidirectionalCell:
+    """represents a bidirectional cell RNN"""
     def __init__(self, i, h, o):
         """
         Class constructor:
