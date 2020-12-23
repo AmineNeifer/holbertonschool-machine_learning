@@ -13,7 +13,7 @@ def fasttext_model(sentences, size=100, min_count=5, negative=5, window=5,
         min_count=min_count,
         window=window,
         negative=negative,
-        sg=cbow,
+        sg=not cbow,
         iter=iterations,
         seed=seed)
     model.train(
