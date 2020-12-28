@@ -26,8 +26,6 @@ def ngram_bleu(references, sentence, n):
             else:
                 words.update({word: ref.count(word)})
     p = sum(words.values()) / len(sentence)
-    print("bp: ", bp)
-    print("p: ", p)
     return bp * p
 
 
