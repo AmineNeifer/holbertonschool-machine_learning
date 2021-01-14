@@ -20,7 +20,7 @@ class Dataset:
 
     def tokenize_dataset(self, data):
         """ Creates sub-word tokenizers for our dataset"""
-        tokenize = tfds.deprecated.text.SubwordTextEncoder.build_from_corpus
+        tokenize = tfds.features.text.SubwordTextEncoder.build_from_corpus
         tokenizer_en = tokenize((en.numpy()
                                  for pt, en in data), target_vocab_size=2**15)
         tokenizer_pt = tokenize((pt.numpy()
