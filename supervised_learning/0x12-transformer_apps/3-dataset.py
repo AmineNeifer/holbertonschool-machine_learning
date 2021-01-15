@@ -36,21 +36,6 @@ class Dataset:
         self.data_valid = data_valid.padded_batch(
             batch_size, padded_shapes=([None], [None]))
 
-    def filter_max_length(x, y, max_length=max_len):
-        """ filtering out sentences with length > max_length"""
-        return tf.logical_and(tf.size(x) <= max_length,
-                              tf.size(y) <= max_length)
-    data_train = data_train.filter(filter_max_length)
-    data_train = data_train.cache()
-    data_train = data_train.shuffle(True).padded_batch(
-        batch_size, padded_shapes=([None], [None]))
-    self.data_train = data_train.prefetch(tf.data.AUTOTUNE)
-
-    data_valid = data_valid.map(self.tf_encode)
-    data_train = data_train.filter(filter_max_length)
-    self.data_valid = data_valid.shuffle(True).padded_batch(
-        batch_size, padded_shapes=([None], [None]))
-
     def tokenize_dataset(self, data):
         """ Creates sub-word tokenizers for our dataset"""
         tokenize = tfds.features.text.SubwordTextEncoder.build_from_corpus
