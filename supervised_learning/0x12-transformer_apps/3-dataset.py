@@ -29,7 +29,7 @@ class Dataset:
         self.data_train = data_train.prefetch(tf.data.experimental.AUTOTUNE)
 
         data_valid = data_valid.map(self.tf_encode)
-        data_train = data_train.filter(filter_max_length)
+        data_valid = data_valid.filter(filter_max_length)
         self.data_valid = data_valid.shuffle(True).padded_batch(
             batch_size, padded_shapes=([None], [None]))
 
