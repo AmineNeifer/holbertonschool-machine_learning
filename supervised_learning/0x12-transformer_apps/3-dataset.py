@@ -11,12 +11,15 @@ class Dataset:
 
     def __init__(self, batch_size, max_len):
         """Constructor"""
-        data_train, data_valid = tfds.load('ted_hrlr_translate/pt_to_en',
-                                           split=['train', 'validation'],
-                                           as_supervised=True)
+        (data_train, data_valid), metadata = tfds.load(
+            'ted_hrlr_translate/pt_to_en',
+            split=['train', 'validation'],
+            as_supervised=True,
+            with_info=True)
         self.tokenizer_pt, self.tokenizer_en = self.tokenize_dataset(
             data_train)
         data_train = data_train.map(self.tf_encode)
+        train_buffer_size = metadata.splits['train'].num_examples
 
         def filter_max_length(x, y, max_length=max_len):
             """ filtering out sentences with length > max_length"""
@@ -24,13 +27,13 @@ class Dataset:
                                   tf.size(y) <= max_length)
         data_train = data_train.filter(filter_max_length)
         data_train = data_train.cache()
-        data_train = data_train.shuffle(True).padded_batch(
+        data_train = data_train.shuffle(train_buffer_size).padded_batch(
             batch_size, padded_shapes=([None], [None]))
         self.data_train = data_train.prefetch(tf.data.experimental.AUTOTUNE)
 
         data_valid = data_valid.map(self.tf_encode)
         data_valid = data_valid.filter(filter_max_length)
-        self.data_valid = data_valid.shuffle(True).padded_batch(
+        self.data_valid = data_valid.padded_batch(
             batch_size, padded_shapes=([None], [None]))
 
     def filter_max_length(x, y, max_length=max_len):
