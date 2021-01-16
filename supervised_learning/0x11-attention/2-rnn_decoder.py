@@ -40,6 +40,7 @@ class RNNDecoder(tf.keras.layers.Layer):
 
         concat = tf.concat([tf.expand_dims(context, 1), x], -1)
         outputs, hidden = self.gru(concat)
+        outputs = tf.reshape(outputs, (batch, -1))
         output = self.F(outputs)
 
-        return tf.reshape(output, (batch, -1)), hidden
+        return output, hidden
