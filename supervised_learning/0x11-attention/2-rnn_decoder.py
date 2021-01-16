@@ -33,11 +33,11 @@ class RNNDecoder(tf.keras.layers.Layer):
         s: new decoder hidden state
         """
         batch = x.shape[0]
-        x = self.embedding(x)
 
         selfattention = SelfAttention(self.units)
         context, _ = selfattention(s_prev, hidden_states)
 
+        x = self.embedding(x)
         concat = tf.concat([tf.expand_dims(context, 1), x], -1)
         outputs, hidden = self.gru(concat)
         outputs = tf.reshape(outputs, (-1, outputs.shape[2]))
