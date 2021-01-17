@@ -24,6 +24,7 @@ class EncoderBlock(tf.keras.layers.Layer):
         self.dropout2 = tf.keras.layers.Dropout(drop_rate)
 
     def point_wise_feed_forward_network(self):
+        """ puts self.dense_hidden and self.dense_output in one"""
         return tf.keras.Sequential([
             self.dense_hidden,  # (batch_size, seq_len, dff)
             self.dense_output  # (batch_size, seq_len, d_model)
