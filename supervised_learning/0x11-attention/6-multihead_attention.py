@@ -2,6 +2,7 @@
 
 """ contains MultiHeadAttention class"""
 import tensorflow as tf
+sdp_attention = __import__('5-sdp_attention').sdp_attention
 
 
 class MultiHeadAttention(tf.keras.layers.Layer):
@@ -39,7 +40,7 @@ class MultiHeadAttention(tf.keras.layers.Layer):
         # (batch_size, num_heads, seq_len_v, depth)
         v = self.split_heads(v, batch_size)
 
-        scaled_attention, attention_weights = scaled_dot_product_attention(
+        scaled_attention, attention_weights = sdp_attention(
             q, k, v, mask)
 
         # (batch_size, seq_len_q, num_heads, depth)
