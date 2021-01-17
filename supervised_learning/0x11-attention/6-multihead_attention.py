@@ -17,7 +17,6 @@ class MultiHeadAttention(tf.keras.layers.Layer):
         self.Wq = tf.keras.layers.Dense(dm)  # for query matrix generation
         self.Wk = tf.keras.layers.Dense(dm)  # for key matrix generation
         self.Wv = tf.keras.layers.Dense(dm)  # for value matrix generation
-        # for attention output generation
         self.linear = tf.keras.layers.Dense(dm)
 
     def split_heads(self, x, batch_size):
@@ -28,7 +27,7 @@ class MultiHeadAttention(tf.keras.layers.Layer):
 
     def call(self, Q, K, V, mask):
         """ returns output and weights"""
-        batch_size = Q.shape[0]
+        batch_size = tf.shape(Q)[0]
         q = self.Wq(Q)
         k = self.Wk(K)
         v = self.Wv(V)
