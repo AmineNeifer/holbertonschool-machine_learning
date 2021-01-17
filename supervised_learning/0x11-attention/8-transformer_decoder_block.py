@@ -33,6 +33,11 @@ class DecoderBlock(tf.keras.layers.Layer):
 
     def call(self, x, enc_output, training,
              look_ahead_mask, padding_mask):
+        """
+        Returns:
+            a tensor of shape (batch, target_seq_len, dm)
+            containing the block’s output
+        """
         # enc_output.shape == (batch_size, input_seq_len, d_model)
 
         attn1, attn_weights_block1 = self.mha1(
