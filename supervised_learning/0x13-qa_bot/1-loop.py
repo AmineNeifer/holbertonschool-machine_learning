@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 """
-script that takes in input from the user with the prompt Q: and prints A: as a response.
+script that takes in input from the user with the
+prompt Q: and prints A: as a response.
 """
 while (True):
     exit_keys = ["exit", "quit", "goodbye", "bye"]
