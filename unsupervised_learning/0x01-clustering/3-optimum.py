@@ -13,13 +13,15 @@ def optimum_k(X, kmin=1, kmax=None, iterations=1000):
         return None, None
     if len(X.shape) != 2:
         return None, None
-    if not isinstance(kmin, int) or kmin < 0:
+    if not isinstance(kmin, int) or kmin < 1:
         return None, None
-    if not isinstance(kmax, int) or kmin < 0:
+    if kmax is None:
+        kmax = X.shape[0]
+    if not isinstance(kmax, int) or kmax < 1:
         return None, None
     if not isinstance(iterations, int) or iterations <= 0:
         return None, None
-    if kmax - kmin <= 2:
+    if kmax - kmin < 1:
         return None, None
     results = []
     d_vars = []
