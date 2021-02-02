@@ -30,8 +30,8 @@ def expectation(X, pi, m, S):
         return None, None
     y = np.zeros([k, n])
     for i in range(k):
-        y[i] = pdf(X, m[i], S[i]) * pi[i]
-
+        pd = pdf(X, m[i], S[i])
+        y[i] = pd * pi[i]
     likelihood = np.log(y.sum(axis=0)).sum()
     y /= y.sum(axis=0)
     return y, likelihood
