@@ -28,4 +28,10 @@ def expectation(X, pi, m, S):
         return None, None
     if len(S.shape) != 3 or S.shape != (k, d, d):
         return None, None
-    np.seterr(all="ignore")
+    y = np.zeros([k, n])
+    for i in range(k):
+        y[i] = pdf(X, m[i], S[i]) * pi[i]
+
+    likelihood = np.log(y.sum(axis=0)).sum()
+    y /= y.sum(axis=0)
+    return y, likelihood
