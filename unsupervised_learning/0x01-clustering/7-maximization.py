@@ -15,3 +15,10 @@ def maximization(X, g):
         return None, None, None
     if len(g.shape) != 2:
         return None, None, None
+    m = np.sum(np.matmul(g, X), axis=0) / np.sum(g, axis=1)
+    pi = 1 / (n * np.sum(g, axis=1))
+    S = np.zeros((k, d, d))
+    for i in range(k):
+        S[i] = np.matmul(g[i].reshape(1, n) * (X - m[i]).T, (X - m[i]))
+        S[i] /= np.sum(g, axis=1)[i]
+    return pi, m, S
