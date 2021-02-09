@@ -12,5 +12,5 @@ def epsilon_greedy(Q, state, epsilon):
     if p > epsilon:
         action = np.argmax(Q[state, :])
     else:
-        action = np.random.randint(0, 1)
+        action = np.random.randint(Q.shape[1])
     return action
