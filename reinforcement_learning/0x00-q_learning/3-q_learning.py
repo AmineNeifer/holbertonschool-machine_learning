@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 
 
-"""contains epsilon_greedy function """
+"""contains epsilon_greedy & train function """
 
 import numpy as np
 
