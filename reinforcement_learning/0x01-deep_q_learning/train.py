@@ -103,6 +103,3 @@ dqn.fit(env, nb_steps=1750000, log_interval=10000)
 
 # After training is done, we save the final weights one more time.
 dqn.save_weights(weights_filename, overwrite=True)
-
-# Finally, evaluate our algorithm for 10 episodes.
-dqn.test(env, nb_episodes=10, visualize=True)
