@@ -12,13 +12,16 @@ from rl.policy import LinearAnnealedPolicy, EpsGreedyQPolicy
 from rl.memory import SequentialMemory
 from rl.core import Processor
 
-
+""" contains a model to train dqn agent for atari breakout game"""
 INPUT_SHAPE = (84, 84)
 WINDOW_LENGTH = 4
 
 
 class AtariProcessor(Processor):
+    """ processor for the game"""
+
     def process_observation(self, observation):
+        """process images taken """
         assert observation.ndim == 3  # (height, width, channel)
         img = Image.fromarray(observation)
         img = img.resize(INPUT_SHAPE).convert(
@@ -29,6 +32,7 @@ class AtariProcessor(Processor):
         return processed_observation.astype('uint8')
 
     def process_state_batch(self, batch):
+        """ normalization of the batch images"""
         # We could perform this processing step in `process_observation`.
         # In this case, however, we would need to store a `float32` array
         # instead, which is 4x more memory intensive than
@@ -37,6 +41,7 @@ class AtariProcessor(Processor):
         return processed_batch
 
     def process_reward(self, reward):
+        """limit values in reward array between -1 and 1 """
         return np.clip(reward, -1., 1.)
 
 
