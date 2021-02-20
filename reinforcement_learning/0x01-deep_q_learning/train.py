@@ -82,8 +82,7 @@ print(model.summary())
 memory = SequentialMemory(limit=1000000, window_length=WINDOW_LENGTH)
 processor = AtariProcessor()
 
-policy = LinearAnnealedPolicy(EpsGreedyQPolicy(), attr='eps', value_max=1.,
-                              value_min=.1, value_test=.05, nb_steps=1000000)
+policy = EpsGreedyQPolicy()
 
 # The trade-off between exploration and exploitation is difficult
 # and an on-going research topic.
