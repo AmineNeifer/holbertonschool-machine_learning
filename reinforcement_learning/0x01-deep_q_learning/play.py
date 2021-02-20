@@ -8,7 +8,7 @@ from keras.optimizers import Adam
 import keras.backend as K
 
 from rl.agents.dqn import DQNAgent
-from rl.policy import LinearAnnealedPolicy, EpsGreedyQPolicy
+from rl.policy import GreedyQPolicy, EpsGreedyQPolicy, LinearAnnealedPolicy
 from rl.memory import SequentialMemory
 from rl.core import Processor
 """ loads a model weights for atari breakout game and test it"""
@@ -83,13 +83,7 @@ print(model.summary())
 memory = SequentialMemory(limit=1000000, window_length=WINDOW_LENGTH)
 processor = AtariProcessor()
 
-policy = LinearAnnealedPolicy(
-    EpsGreedyQPolicy(),
-    attr='eps',
-    value_max=1.,
-    value_min=.1,
-    value_test=.05,
-    nb_steps=1000000)
+policy = GreedyQPolicy()
 
 
 dqn = DQNAgent(model=model, nb_actions=nb_actions, policy=policy,
