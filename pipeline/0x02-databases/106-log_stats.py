@@ -23,4 +23,4 @@ if __name__ == "__main__":
 
     res = school_collection.aggregate(pipeline=pipeline)
     for item in list(res)[:10]:
-        print('\t{}:{}'.format(item['_id'], item['count']))
+        print('\t{}: {}'.format(item['_id'], item['count']))
