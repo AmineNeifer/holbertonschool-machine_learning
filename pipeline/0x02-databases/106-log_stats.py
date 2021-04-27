@@ -1,7 +1,12 @@
 #!/usr/bin/env python3
-""" Improved 34-log_stats.py by adding the top 10 of the most
-present IPs in the collection nginx of the database logs"""
+
+"""
+Improved 34-log_stats.py by adding the top 10 of the most
+present IPs in the collection nginx of the database logs
+"""
 from pymongo import MongoClient
+
+
 from bson.son import SON
 
 if __name__ == "__main__":
@@ -27,4 +32,3 @@ if __name__ == "__main__":
     print("IPs:")
     for item in res:
         print('\t{}: {}'.format(item['_id'], item['count']))
-    
