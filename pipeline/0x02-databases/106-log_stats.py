@@ -22,5 +22,6 @@ if __name__ == "__main__":
     ]
 
     res = school_collection.aggregate(pipeline=pipeline)
+    print("IPs")
     for item in list(res)[:10]:
         print('\t{}: {}'.format(item['_id'], item['count']))
