@@ -6,7 +6,8 @@ import requests
 
 def sentientPlanets():
     """
-    Returns the list of names of the home planets of all
+    Returns:
+    the list of names of the home planets of all
     sentient species, using the Swapi API.
     """
     url = "https://swapi-api.hbtn.io/api/species"
