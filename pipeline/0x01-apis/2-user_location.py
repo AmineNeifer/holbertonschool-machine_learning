@@ -20,3 +20,5 @@ if __name__ == "__main__":
             print(r_json["location"])
         except KeyError:
             print("Not found")
+    else:
+        print("Not found")
