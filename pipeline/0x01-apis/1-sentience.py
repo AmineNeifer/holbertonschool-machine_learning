@@ -15,7 +15,8 @@ def sentientPlanets():
     while True:
         r = requests.get(url).json()
         for value in r["results"]:
-            if value["designation"] == "sentient" or value['classification'] == 'sentient':
+            if value["designation"] == "sentient" or\
+                    value['classification'] == 'sentient':
                 try:
                     lista.append(
                         requests.get(
