@@ -17,7 +17,7 @@ def availableShips(passengerCount):
         r = requests.get(url).json()
         for value in r["results"]:
             try:
-                pass_num = int(value["passengers"])
+                pass_num = int(value["passengers"].replace(',',''))
             except ValueError:
                 continue
             if pass_num >= passengerCount:
