@@ -21,6 +21,7 @@ dependencies:
   - wheel=0.36.2=pyhd3eb1b0_0
   - xz=5.2.5=h7b6447c_0
   - zlib=1.2.11=h7b6447c_3
+  - pip
   - pip:
     - atari-py==0.2.6
     - h5py==2.10.0
