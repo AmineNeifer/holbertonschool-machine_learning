@@ -29,5 +29,6 @@ if __name__ == "__main__":
     launchpad_name = launchpad_values["name"]
     launchpad_locality = launchpad_values["locality"]
 
-    print(f"{launch_name} ({date}) {rocket_name} \
-- {launchpad_name} ({launchpad_locality})")
+    print("{} ({}) {} - {} ({})".format(launch_name, date,
+                                        rocket_name, launchpad_name,
+                                        launchpad_locality))
