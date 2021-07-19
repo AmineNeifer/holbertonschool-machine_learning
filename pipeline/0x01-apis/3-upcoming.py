@@ -1,4 +1,9 @@
 #!/usr/bin/env python3
+
+
+""" script that displays the upcoming
+    launch with these information """
+
 import requests
 
 
