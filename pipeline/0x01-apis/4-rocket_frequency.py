@@ -28,4 +28,4 @@ if __name__ == "__main__":
 
     for k, v in sorted(sorted(launches.items()),
                        key=lambda x: x[1], reverse=True):
-        print(f"{k}: {v}")
+        print("{}: {}".format(k, v))
