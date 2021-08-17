@@ -1,8 +1,10 @@
 #!/usr/bin/env python3
 
+""" haw comments """
 import tensorflow as tf
 
 def create_batch_norm_layer(prev, n, activation):
+    """ comments marokhra"""
     dense = tf.layers.Dense(n, kernel_initializer=tf.contrib.layers.variance_scaling_initializer(mode="FAN_AVG"), name='dense')
     z = dense(prev)
     gamma = tf.Variable(tf.constant(1.0, shape=[n]), name='gamma', trainable=True)
