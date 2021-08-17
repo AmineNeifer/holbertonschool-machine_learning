@@ -3,17 +3,11 @@
 import tensorflow as tf
 
 def create_batch_norm_layer(prev, n, activation):
-    gamma = tf.Variable(initial_value=1, dtype=tf.float32, trainable=True)
-    beta = tf.Variable(initial_value=0, dtype=tf.float32, trainable=True)
-    epsilon = tf.Variable(initial_value=1e-8)
-
-    w = tf.contrib.layers.variance_scaling_initializer(mode='FAN_AVG')
-
-    linear_model = tf.layers.Dense(units=n,
-                                   kernel_initializer=w,
-                                   activation=activation
-                                   )
-    y = linear_model(prev)
-    mean, variance = tf.nn.moments(y, axes=0)
-    
-    return tf.nn.batch_normalization(y, mean, variance, beta, gamma, epsilon)
+    dense = tf.layers.Dense(n, kernel_initializer=tf.contrib.layers.variance_scaling_initializer(mode="FAN_AVG"), name='dense')
+    z = dense(prev)
+    gamma = tf.Variable(tf.constant(1.0, shape=[n]), name='gamma', trainable=True)
+    beta = tf.Variable(tf.constant(0.0, shape=[n]), name='beta', trainable=True)
+    m, v = tf.nn.moments(z, axes=0)
+    z_norm = tf.nn.batch_normalization(z, m, v, beta, gamma, 1e-8)
+    a = activation(z_norm)
+    return a
