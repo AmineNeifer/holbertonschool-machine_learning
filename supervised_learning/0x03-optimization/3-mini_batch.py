@@ -1,7 +1,6 @@
 #!/usr/bin/env python3
 
 """ Docs lela """
-import numpy as np
 import tensorflow as tf
 shuffle_data = __import__('2-shuffle_data').shuffle_data
 
@@ -31,7 +30,7 @@ def train_mini_batch(X_train, Y_train, X_valid, Y_valid, batch_size=32, epochs=5
                 X_batch = X_shuffle[j:j + batch_size]
                 Y_batch = Y_shuffle[j:j + batch_size]
                 sess.run(train_op, feed_dict={x: X_batch, y: Y_batch})
-                step = int(np.ceil(X_train.shape[0] / batch_size))
+                step = X_train.shape[0] // batch_size + 1
                 if not (step % 100):
                     cost, acc = sess.run((loss, accuracy), feed_dict={
                                          x: X_batch, y: Y_batch})
