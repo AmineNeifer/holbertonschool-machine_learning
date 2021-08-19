@@ -5,8 +5,8 @@ import tensorflow as tf
 shuffle_data = __import__('2-shuffle_data').shuffle_data
 
 
-def train_mini_batch(X_train, Y_train, X_valid, Y_valid, batch_size=32, epochs=5, load_path="model.ckpt", save_path="model.ckpt"):
-    """ haja"""
+# def train_mini_batch(X_train, Y_train, X_valid, Y_valid, batch_size=32, epochs=5, load_path="model.ckpt", save_path="model.ckpt"):
+#    """ haja"""
     # with tf.Session() as sess:
     #     new_saver = tf.train.import_meta_graph(load_path + ".meta")
     #     new_saver.restore(sess, load_path)
@@ -31,7 +31,7 @@ def train_mini_batch(X_train, Y_train, X_valid, Y_valid, batch_size=32, epochs=5
     #             X_batch = X_shuffle[j:j + batch_size]
     #             Y_batch = Y_shuffle[j:j + batch_size]
     #             sess.run(train_op, feed_dict={x: X_batch, y: Y_batch})
-    #             step = X_train.shape[0] // batch_size + 1
+    #             step = j // batch_size + 1
     #             if not (step % 100):
     #                 cost, acc = sess.run((loss, accuracy), feed_dict={
     #                                      x: X_batch, y: Y_batch})
@@ -50,6 +50,7 @@ def train_mini_batch(X_train, Y_train, X_valid, Y_valid, batch_size=32, epochs=5
     #         sess.run(accuracy, feed_dict={x: X_valid, y: Y_valid})))
     #     return new_saver.save(sess, save_path)
 
+def train_mini_batch(X_train, Y_train, X_valid, Y_valid, batch_size=32, epochs=5, load_path="/tmp/model.ckpt", save_path="/tmp/model.ckpt"):
     with tf.Session() as sess:
         saver = tf.train.import_meta_graph(load_path + '.meta')
         saver.restore(sess, load_path)
