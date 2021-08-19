@@ -49,15 +49,6 @@ def train_mini_batch(X_train, Y_train, X_valid, Y_valid, batch_size=32, epochs=5
     #     print("\tTraining Accuracy: {}".format(
     #         sess.run(accuracy, feed_dict={x: X_valid, y: Y_valid})))
     #     return new_saver.save(sess, save_path)
-    #!/usr/bin/env python3
-
-shuffle_data = __import__('2-shuffle_data').shuffle_data
-import tensorflow as tf
-
-
-def train_mini_batch(X_train, Y_train, X_valid, Y_valid,
-                     batch_size=32, epochs=5, load_path="/tmp/model.ckpt",
-                     save_path="/tmp/model.ckpt"):
 
     with tf.Session() as sess:
         saver = tf.train.import_meta_graph(load_path + '.meta')
