@@ -57,7 +57,7 @@ def model(Data_train, Data_valid, layers, activations, alpha=0.001, beta1=0.9,
     alpha = tf.train.inverse_time_decay(alpha, global_step, decay_steps,
                                         decay_rate, staircase=True)
     optimizer = tf.train.AdamOptimizer(alpha, beta1, beta2, epsilon)
-    train_op = optimizer.minimize(loss)#, global_step=global_step)
+    train_op = optimizer.minimize(loss, global_step=global_step)
     tf.add_to_collection('train_op', train_op)
 
     init = tf.global_variables_initializer()

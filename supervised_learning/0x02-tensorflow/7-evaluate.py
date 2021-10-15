@@ -3,7 +3,7 @@
 
 """ contains evaluate funct"""
 
-import tensorflow as tf
+import tensorflow.compat.v1 as tf
 
 
 def evaluate(X, Y, save_path):
@@ -19,5 +19,6 @@ def evaluate(X, Y, save_path):
         loss = tf.get_collection('loss')[0]
         accuracy = tf.get_collection('accuracy')[0]
         y_pred = tf.get_collection('y_pred')[0]
-        y_pred, loss_value, accu_value = sess.run((y_pred, loss, accuracy), feed_dict = {x:X, y:Y})
+        y_pred, loss_value, accu_value = sess.run(
+            (y_pred, loss, accuracy), feed_dict={x: X, y: Y})
         return y_pred, accu_value, loss_value

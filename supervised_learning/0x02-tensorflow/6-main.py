@@ -1,7 +1,8 @@
 #!/usr/bin/env python3
 
 import numpy as np
-import tensorflow as tf
+import tensorflow.compat.v1 as tf
+tf.disable_eager_execution()
 train = __import__('6-train').train
 
 
