@@ -47,19 +47,23 @@ def train(
         for i in range(iterations):
             if not i % 100:
                 print('After {} iterations:'.format(i))
-                train_cost, train_accuracy = sess.run((loss, accuracy), feed_dict={x:X_train, y:Y_train})
+                train_cost, train_accuracy = sess.run(
+                    (loss, accuracy), feed_dict={x: X_train, y: Y_train})
                 print('\tTraining Cost: {}'.format(train_cost))
                 print('\tTraining Accuracy: {}'.format(train_accuracy))
-                valid_cost, valid_accuracy = sess.run((loss, accuracy), feed_dict={x:X_valid, y:Y_valid})
+                valid_cost, valid_accuracy = sess.run(
+                    (loss, accuracy), feed_dict={x: X_valid, y: Y_valid})
                 print('\tValidation Cost: {}'.format(valid_cost))
                 print('\tValidation Accuracy: {}'.format(valid_accuracy))
-            sess.run(train_op, feed_dict={x:X_train, y:Y_train})
+            sess.run(train_op, feed_dict={x: X_train, y: Y_train})
 
         print('After {} iterations:'.format(iterations))
-        train_cost, train_accuracy = sess.run((loss, accuracy), feed_dict={x:X_train, y:Y_train})
+        train_cost, train_accuracy = sess.run(
+            (loss, accuracy), feed_dict={x: X_train, y: Y_train})
         print('\tTraining Cost: {}'.format(train_cost))
         print('\tTraining Accuracy: {}'.format(train_accuracy))
-        valid_cost, valid_accuracy = sess.run((loss, accuracy), feed_dict={x:X_valid, y:Y_valid})
+        valid_cost, valid_accuracy = sess.run(
+            (loss, accuracy), feed_dict={x: X_valid, y: Y_valid})
         print('\tValidation Cost: {}'.format(valid_cost))
         print('\tValidation Accuracy: {}'.format(valid_accuracy))
 
