@@ -1,24 +1,27 @@
 #!/usr/bin/env python3
 
+""" contains train_mini_batch function"""
+
 import tensorflow.compat.v1 as tf
 shuffle_data = __import__('2-shuffle_data').shuffle_data
 tf.disable_eager_execution()
 
 
-def train_mini_batch(X_train, Y_train, X_valid, Y_valid, batch_size=32,
- epochs=5, load_path="/tmp/model.ckpt", save_path="/tmp/model.ckpt"):
+def train_mini_batch(X_train, Y_train, X_valid, Y_valid,
+                     batch_size=32, epochs=5, load_path="/tmp/model.ckpt",
+                     save_path="/tmp/model.ckpt"):
     """
     X_train: np.ndarray of shape (m, 784) containing the training data
-        m is the number of data points
-        784 is the number of input features
+        m: the number of data points
+        784: the number of input features
     Y_train: one-hot np.ndarray of shape (m, 10) containing the training labels
-        10 is the number of classes the model should classify
+        10: the number of classes the model should classify
     X_valid: np.ndarray of shape (m, 784) containing the validation data
     Y_valid: one-hot np.ndarray of shape (m, 10) contains the validation labels
-    batch_size is the number of data points in a batch
-    epochs is the nb of times the training should pass through the whole dataset
-    load_path is the path from which to load the model
-    save_path is the path to where the model should be saved after training
+    batch_size: the number of data points in a batch
+    epochs: the nb of times the training should pass through the whole dataset
+    load_path: the path from which to load the model
+    save_path: the path to where the model should be saved after training
     Returns: the path where the model was saved
     """
     with tf.Session() as sess:
