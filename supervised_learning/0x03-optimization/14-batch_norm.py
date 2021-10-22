@@ -1,11 +1,11 @@
 #!/usr/bin/env python3
 
 """ haw comments """
-import tensorflow as tf
+import tensorflow.compat.v1 as tf
 
 def create_batch_norm_layer(prev, n, activation):
     """ comments marokhra"""
-    w = tf.contrib.layers.variance_scaling_initializer(mode="FAN_AVG")
+    w = tf.keras.initializers.VarianceScaling(mode='fan_avg')
     dense = tf.layers.Dense(n, kernel_initializer=w)
     z = dense(prev)
     gamma = tf.Variable(1, dtype=tf.float32, trainable=True)
