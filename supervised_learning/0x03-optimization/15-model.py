@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 
 import numpy as np
-import tensorflow as tf
+import tensorflow.compat.v1 as tf
 
 def shuffle_data(X, Y):
     p = np.random.permutation(X.shape[0])
@@ -10,7 +10,7 @@ def shuffle_data(X, Y):
 def forward_prop(x, layers, activations, epsilon):
     prev = x
     for i, n in enumerate(layers):
-        dense = tf.layers.Dense(n, kernel_initializer=tf.contrib.layers.variance_scaling_initializer(mode="FAN_AVG"), name='dense')
+        dense = tf.layers.Dense(n, kernel_initializer=tf.keras.initializers.VarianceScaling(mode='fan_avg'), name='dense')
         z = dense(prev)
         if i < len(layers) - 1:
             gamma = tf.Variable(tf.constant(1.0, shape=[n]), name='gamma',
