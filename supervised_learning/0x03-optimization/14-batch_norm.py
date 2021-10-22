@@ -3,6 +3,7 @@
 """ haw comments """
 import tensorflow.compat.v1 as tf
 
+
 def create_batch_norm_layer(prev, n, activation):
     """ comments marokhra"""
     w = tf.keras.initializers.VarianceScaling(mode='fan_avg')
