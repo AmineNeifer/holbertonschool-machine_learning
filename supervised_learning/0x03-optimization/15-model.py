@@ -3,14 +3,19 @@
 import numpy as np
 import tensorflow.compat.v1 as tf
 
+
 def shuffle_data(X, Y):
     p = np.random.permutation(X.shape[0])
     return X[p], Y[p]
 
+
 def forward_prop(x, layers, activations, epsilon):
     prev = x
     for i, n in enumerate(layers):
-        dense = tf.layers.Dense(n, kernel_initializer=tf.keras.initializers.VarianceScaling(mode='fan_avg'), name='dense')
+        initializer = tf.keras.initializers.VarianceScaling(
+            mode='fan_avg')
+        dense = tf.layers.Dense(n,
+                                kernel_initializer=initializer, name='dense')
         z = dense(prev)
         if i < len(layers) - 1:
             gamma = tf.Variable(tf.constant(1.0, shape=[n]), name='gamma',
@@ -24,6 +29,7 @@ def forward_prop(x, layers, activations, epsilon):
         else:
             prev = z
     return prev
+
 
 def model(Data_train, Data_valid, layers, activations, alpha=0.001, beta1=0.9,
           beta2=0.999, epsilon=1e-8, decay_rate=1, batch_size=32, epochs=5,
@@ -63,37 +69,40 @@ def model(Data_train, Data_valid, layers, activations, alpha=0.001, beta1=0.9,
     init = tf.global_variables_initializer()
     with tf.Session() as sess:
         sess.run(init)
-        
+
         for i in range(epochs):
             print('After {} epochs:'.format(i))
             train_cost, train_accuracy = sess.run((loss, accuracy),
-                                                  feed_dict={x:X_train,
-                                                             y:Y_train})
+                                                  feed_dict={x: X_train,
+                                                             y: Y_train})
             print('\tTraining Cost: {}'.format(train_cost))
             print('\tTraining Accuracy: {}'.format(train_accuracy))
             valid_cost, valid_accuracy = sess.run((loss, accuracy),
-                                                  feed_dict={x:X_valid,
-                                                             y:Y_valid})
+                                                  feed_dict={x: X_valid,
+                                                             y: Y_valid})
             print('\tValidation Cost: {}'.format(valid_cost))
             print('\tValidation Accuracy: {}'.format(valid_accuracy))
             X_shuffle, Y_shuffle = shuffle_data(X_train, Y_train)
             for j in range(0, X_train.shape[0], batch_size):
                 X_batch = X_shuffle[j:j + batch_size]
                 Y_batch = Y_shuffle[j:j + batch_size]
-                sess.run(train_op, feed_dict={x:X_batch, y:Y_batch})
+                sess.run(train_op, feed_dict={x: X_batch, y: Y_batch})
                 if not ((j // batch_size + 1) % 100):
-                    cost, acc = sess.run((loss, accuracy), feed_dict={x:X_batch, y:Y_batch})
+                    cost, acc = sess.run((loss, accuracy), feed_dict={
+                                         x: X_batch, y: Y_batch})
                     print('\tStep {}:'.format(j // batch_size + 1))
                     print('\t\tCost: {}'.format(cost))
                     print('\t\tAccuracy: {}'.format(acc))
 
         print('After {} epochs:'.format(epochs))
         train_cost, train_accuracy = sess.run((loss, accuracy),
-                                              feed_dict={x:X_train, y:Y_train})
+                                              feed_dict={x: X_train,
+                                                         y: Y_train})
         print('\tTraining Cost: {}'.format(train_cost))
         print('\tTraining Accuracy: {}'.format(train_accuracy))
         valid_cost, valid_accuracy = sess.run((loss, accuracy),
-                                              feed_dict={x:X_valid, y:Y_valid})
+                                              feed_dict={x: X_valid,
+                                                         y: Y_valid})
         print('\tValidation Cost: {}'.format(valid_cost))
         print('\tValidation Accuracy: {}'.format(valid_accuracy))
 
