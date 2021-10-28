@@ -29,7 +29,6 @@ class NST:
             raise TypeError('alpha must be a non-negative number')
         if beta < 0:
             raise TypeError('beta must be a non-negative number')
-        tf.enable_eager_execution()
         self.style_image = self.scale_image(style_image)
         self.content_image = self.scale_image(content_image)
         self.alpha = alpha
@@ -44,21 +43,10 @@ class NST:
         if not isinstance(image, np.ndarray) or len(image.shape) != 3:
             raise TypeError(
                 'content_image must be a numpy.ndarray with shape (h, w, 3)')
-        h, w, _ = image.shape
-        if h > w:
-            new_h = 512
-            scale = 512 / h
-            new_w = w * scale
-        else:
-            new_w = 512
-            scale = 512 / w
-            new_h = h * scale
-        new_h = int(new_h)
-        new_w = int(new_w)
-
-        dim = (int(new_h), int(new_w))
-        image = tf.reshape(image, [1, h, w, 3])
-        image = tf.image.resize_bicubic(image, dim)
-        image = image / 255
-        image = tf.clip_by_value(image, clip_value_min=0, clip_value_max=1)
+        max_dims = 512
+        shape = image.shape[:2]
+        scale = max_dims / max(shape[0], shape[1])
+        new_shape = (int(scale * shape[0]), int(scale * shape[1]))
+        image = np.expand_dims(image, axis=0)
+        image = tf.clip_by_value(tf.image.resize(image, new_shape, 'bicubic') / 255, 0, 1)
         return image
