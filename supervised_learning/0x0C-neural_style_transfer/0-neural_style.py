@@ -18,11 +18,11 @@ class NST:
     def __init__(self, style_image, content_image, alpha=1e4, beta=1):
         """ initialization of NST"""
         if not isinstance(style_image, np.ndarray) or len(
-                style_image.shape) != 3:
+                style_image.shape) != 3 or style_image.shape[2] != 3:
             raise TypeError(
                 'style_image must be a numpy.ndarray with shape (h, w, 3)')
         if not isinstance(content_image, np.ndarray) or len(
-                content_image.shape) != 3:
+                content_image.shape) != 3 or content_image.shape[2] != 3:
             raise TypeError(
                 'content_image must be a numpy.ndarray with shape (h, w, 3)')
         if not isinstance(alpha, int) or alpha < 0:
@@ -48,5 +48,6 @@ class NST:
         scale = max_dims / max(shape[0], shape[1])
         new_shape = (int(scale * shape[0]), int(scale * shape[1]))
         image = np.expand_dims(image, axis=0)
-        image = tf.clip_by_value(tf.image.resize(image, new_shape, 'bicubic') / 255, 0, 1)
+        image = tf.clip_by_value(tf.image.resize(
+            image, new_shape, 'bicubic') / 255, 0, 1)
         return image
