@@ -6,9 +6,12 @@ import numpy as np
 
 def specificity(confusion):
     """ returns an array containing specificity"""
-    diag = np.diagonal(np.fliplr(confusion))
-    sensitivity = diag / confusion.sum(axis=1)  # TP / (TP + FN)
-    precision = diag / confusion.sum(axis=0)  # TP / (TP + FP)
-    """ specificity = still"""  # TN / (TN + FP)
+    actual = np.sum(confusion, axis=1)
+    total = np.sum(confusion)
+    actual_no = total - actual
 
-    return
+    predicted = np.sum(confusion, axis=0)
+    diagonal = np.diagonal(confusion)
+    FP = predicted - diagonal
+
+    return 1 - FP / actual_no
