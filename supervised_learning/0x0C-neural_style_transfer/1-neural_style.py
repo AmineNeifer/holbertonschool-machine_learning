@@ -35,7 +35,6 @@ class NST:
         self.beta = beta
         self.load_model()
 
-
     @staticmethod
     def scale_image(image):
         """
@@ -56,13 +55,15 @@ class NST:
 
     def load_model(self):
         """Creates the model used to calculate the cost"""
-        vgg = tf.keras.applications.VGG19(include_top=False, weights='imagenet')
+        vgg = tf.keras.applications.VGG19(
+            include_top=False, weights='imagenet')
         x = vgg.input
         model_outputs = []
         content_output = None
         for layer in vgg.layers[1:]:
             if "pool" in layer.name:
-                x = tf.keras.layers.AveragePooling2D(pool_size=layer.pool_size, strides=layer.strides, name=layer.name)(x)
+                x = tf.keras.layers.AveragePooling2D(
+                    pool_size=layer.pool_size, strides=layer.strides, name=layer.name)(x)
             else:
                 x = layer(x)
                 if layer.name in self.style_layers:
