@@ -63,7 +63,9 @@ class NST:
         for layer in vgg.layers[1:]:
             if "pool" in layer.name:
                 x = tf.keras.layers.AveragePooling2D(
-                    pool_size=layer.pool_size, strides=layer.strides, name=layer.name)(x)
+                    pool_size=layer.pool_size,
+                    strides=layer.strides,
+                    name=layer.name)(x)
             else:
                 x = layer(x)
                 if layer.name in self.style_layers:
