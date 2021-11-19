@@ -1,64 +1,44 @@
 #!/usr/bin/env python3
 
-
-""" contains Yolo class"""
-import tensorflow.keras as K
 import numpy as np
+import tensorflow.keras as K
 
-
-class Yolo():
-    """Class that uses the Yolo v3 algorithm to perform object detection"""
-
+class Yolo:
+    """Class to perform the Yolo algorithm on image data"""
     def __init__(self, model_path, classes_path, class_t, nms_t, anchors):
-        self.model = K.models.load_model(model_path)
-        with open(classes_path, "r") as f:
-            r = f.read().split("\n")[:-1]
-        self.class_names = r
-        self.class_t = class_t
-        self.nms_t = nms_t
-        self.anchors = anchors
-
-    def sigmoid(self, x):
-        """sigmoid"""
-        return (1 / (1 + np.exp(-x)))
+        """initializes the Yolo class"""
+        self.class_t = class_t # class score threshold
+        self.nms_t = nms_t # non max suppression threshold
+        self.model = K.models.load_model(model_path) # keras darknet model
+        self.anchors = anchors # anchor boxes
+        with open(classes_path) as f:
+            self.class_names = [class_name.strip() for class_name in f.readlines()]
 
     def process_outputs(self, outputs, image_size):
-        """it processes output"""
-        inp_w = self.model.input.shape[1].value
-        inp_h = self.model.input.shape[2].value
+        """processes the outputs of the model"""
         boxes = []
-        box_c = []
-        box_c_p = []
-        for output in outputs:
-            boxes.append(output[..., 0:4])
-            box_c.append(self.sigmoid(output[..., 4:5]))
-            box_c_p.append(self.sigmoid(output[..., 5:]))
-        img_w = image_size[1]
-        img_h = image_size[0]
-        for i in range(len(outputs)):
-            grid_h = boxes[i].shape[0]
-            grid_w = boxes[i].shape[1]
-            a = boxes[i].shape[2]
-            anchor_w = self.anchors[i, :, 0]
-            anchor_h = self.anchors[i, :, 1]
-            tx = boxes[i][..., 0]
-            ty = boxes[i][..., 1]
-            tw = boxes[i][..., 2]
-            th = boxes[i][..., 3]
-            cx = np.indices((grid_h, grid_w, a))[1]
-            cy = np.indices((grid_h, grid_w, a))[0]
-            bx = (self.sigmoid(tx) + cx) / grid_w
-            by = (self.sigmoid(ty) + cy) / grid_h
-            input_w = self.model.input.shape[1].value
-            input_h = self.model.input.shape[2].value
-            bw = anchor_w * np.exp(tw) / input_w
-            bh = anchor_h * np.exp(th) / input_h
-            x1 = bx - bw / 2
-            x2 = x1 + bw
-            y1 = by - bh / 2
-            y2 = y1 + bh
-            boxes[i][..., 0] = x1 * img_w
-            boxes[i][..., 1] = y1 * img_h
-            boxes[i][..., 2] = x2 * img_w
-            boxes[i][..., 3] = y2 * img_h
-        return boxes, box_c, box_c_p
+        box_confidences = []
+        box_class_probs = []
+
+        for i, output in enumerate(outputs):
+            anchors = self.anchors[i]
+            g_h, g_w = output.shape[:2]
+            
+            t_xy = output[..., :2]
+            t_wh = output[..., 2:4]
+            box_confidence = np.expand_dims(1/(1 + np.exp(-output[..., 4])), axis=-1)
+            box_class_prob = 1/(1 + np.exp(-output[..., 5:]))
+
+            b_wh = anchors * np.exp(t_wh)
+            b_wh = b_wh / self.model.inputs[0].shape.as_list()[1:3]
+            grid = np.tile(np.indices((g_w, g_h)).T, anchors.shape[0]).reshape((g_h, g_w) + anchors.shape)
+            b_xy = (1/(1 + np.exp(-t_xy)) + grid) / [g_w, g_h]
+            b_xy1 = b_xy - (b_wh / 2)
+            b_xy2 = b_xy + (b_wh / 2)
+            box = np.concatenate((b_xy1, b_xy2), axis=-1)
+            box = box * np.tile(np.flip(image_size, axis=0), 2)
+            boxes.append(box)
+            box_confidences.append(box_confidence)
+            box_class_probs.append(box_class_prob)
+
+        return boxes, box_confidences, box_class_probs
