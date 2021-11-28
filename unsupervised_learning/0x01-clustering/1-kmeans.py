@@ -1,53 +1,38 @@
 #!/usr/bin/env python3
 
-""" functions to find kmean"""
 import numpy as np
 
-
-def initialize(X, k):
-    """ initializes cluster centroids for K-means"""
-    if not isinstance(X, np.ndarray):
-        return None
-    if len(X.shape) != 2:
-        return None
-    if not isinstance(k, int):
-        return None
-    if k <= 0:
-        return None
-    n, d = X.shape
-    high = np.amax(X, axis=0)
-    low = np.amin(X, axis=0)
-    cent = np.random.uniform(low, high, (k, d))
-    return cent
-
-
-def closest_centroid(points, centroids):
-    """
-    returns an array containing the idx to the nearest centroid for each nt
-    """
-    distances = np.sqrt(((points - centroids[:, np.newaxis])**2).sum(axis=2))
-    return np.argmin(distances, axis=0)
-
+def classes(X, C):
+    Xe = np.expand_dims(X, axis=1)
+    Ce = np.expand_dims(C, axis=0)
+    D = np.sum(np.square(Xe - Ce), axis=2)
+    clss = np.argmin(D, axis=1)
+    return clss
 
 def kmeans(X, k, iterations=1000):
-    """ kmeans algorithm"""
-    cent = initialize(X, k)
-    if cent is None:
+    """performs kmeans on a dataset"""
+    if type(X) is not np.ndarray or X.ndim != 2:
         return None, None
-    if not isinstance(iterations, int):
+    if type(k) is not int or int(k) != k or k < 1:
         return None, None
-    if iterations <= 0:
+    if type(iterations) is not int or int(iterations) != iterations or iterations < 1:
         return None, None
-    closest = closest_centroid(X, cent)
-    for i in range(iterations):
-        cp = np.copy(cent)
-        for j in range(k):
-            if X[np.where(closest == j)].size == 0:
-                cent[j] = initialize(X, 1)
-            else:
-                cent[j] = X[np.where(closest == j)].mean(axis=0)
-        closest = closest_centroid(X, cent)
-        if np.array_equal(cp, cent):
-            break
+    _, d = X.shape
+    mins = np.min(X, axis=0)
+    maxs = np.max(X, axis=0)
 
-    return cent, closest
+    C = np.random.uniform(mins, maxs, size=(k, d))
+    nC = C.copy()
+    for _ in range(iterations):
+        clss = classes(X, C)
+        for i in range(k):
+            indices = np.argwhere(clss == i).reshape(-1)
+            if X[indices].shape[0] > 0:
+                nC[i] = np.mean(X[indices], axis=0)
+            else:
+                nC[i] = np.random.uniform(mins, maxs)
+        if np.array_equal(nC, C):
+            break
+        C = nC.copy()
+    clss = classes(X, C)
+    return C, clss

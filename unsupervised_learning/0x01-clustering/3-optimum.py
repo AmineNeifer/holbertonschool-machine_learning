@@ -1,34 +1,30 @@
 #!/usr/bin/env python3
 
-
-""" contains a funct that returns optimum"""
 import numpy as np
 kmeans = __import__('1-kmeans').kmeans
 variance = __import__('2-variance').variance
 
-
 def optimum_k(X, kmin=1, kmax=None, iterations=1000):
-    """optimum k"""
-    if not isinstance(X, np.ndarray):
+    if type(X) is not np.ndarray or X.ndim != 2:
         return None, None
-    if len(X.shape) != 2:
-        return None, None
-    if not isinstance(kmin, int) or kmin < 1:
+    if type(kmin) is not int or kmin < 1:
         return None, None
     if kmax is None:
-        kmax = X.shape[0]
-    if not isinstance(kmax, int) or kmax < 1:
+        kmax = X.shape[0] 
+    if type(kmax) is not int or kmax < 1:
         return None, None
-    if not isinstance(iterations, int) or iterations <= 0:
+    if kmax <= kmin:
         return None, None
-    if kmax - kmin < 1:
+    if type(iterations) is not int or iterations < 1:
         return None, None
     results = []
+    var = []
+    for k in range(kmin, kmax + 1):
+        C, clss = kmeans(X, k, iterations)
+        results.append((C, clss))
+        var.append(variance(X, C))
+    d0 = var[0]
     d_vars = []
-    for i in range(kmin, kmax + 1):
-        c, clss = kmeans(X, i, iterations)
-        results.append((c, clss))
-        d_vars.append(variance(X, c))
-    for i in range(len(d_vars)):
-        d_vars[i] = variance(X, results[0][0]) - d_vars[i]
+    for v in var:
+        d_vars.append(d0 - v)
     return results, d_vars

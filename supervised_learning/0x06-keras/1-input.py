@@ -1,25 +1,13 @@
 #!/usr/bin/env python3
 
-
-""" contains build model funct that uses Input instead of sequential"""
 import tensorflow.keras as K
 
-
 def build_model(nx, layers, activations, lambtha, keep_prob):
-    """ build a model using Input class"""
     inputs = K.Input(shape=(nx,))
-    l2 = kernel_regularizer = K.regularizers.l2(lambtha)
-    dense = K.layers.Dense(
-        layers[0],
-        activation=activations[0],
-        kernel_regularizer=l2)
-    x = dense(inputs)
-    for i in range(1, len(layers)):
+    x = inputs
+    for i, layer in enumerate(layers[:-1]):
+        x = K.layers.Dense(layer, activation=activations[i], kernel_initializer=K.initializers.he_normal(), kernel_regularizer=K.regularizers.l2(lambtha))(x)
         x = K.layers.Dropout(1 - keep_prob)(x)
-        x = K.layers.Dense(
-            layers[i],
-            activation=activations[i],
-            kernel_regularizer=l2)(x)
-
-    model = K.Model(inputs=inputs, outputs=x)
-    return model
+    predictions = K.layers.Dense(layers[-1], activation=activations[-1], kernel_initializer=K.initializers.he_normal(), kernel_regularizer=K.regularizers.l2(lambtha))(x)
+    network = K.Model(inputs=inputs, outputs=predictions)
+    return network

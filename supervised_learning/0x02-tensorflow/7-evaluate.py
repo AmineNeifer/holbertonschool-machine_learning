@@ -4,8 +4,7 @@
 """ contains evaluate funct"""
 
 import tensorflow.compat.v1 as tf
-
-
+ 
 def evaluate(X, Y, save_path):
     """ return the y prediction, accuracy and the cost"""
     with tf.Session() as sess:

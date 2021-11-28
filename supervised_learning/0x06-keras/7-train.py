@@ -1,36 +1,20 @@
 #!/usr/bin/env python3
 
-
-""" Contains a functin that trains a model"""
 import tensorflow.keras as K
 
-
 def train_model(network, data, labels, batch_size, epochs,
-                validation_data=None, early_stopping=False,
-                patience=0, learning_rate_decay=False, alpha=0.1,
-                decay_rate=1, verbose=True, shuffle=False):
-    """ train model using keras, with learning rate decay"""
-    callback = []
-    if (validation_data):
-        if (early_stopping):
-            callback.append(K.callbacks.EarlyStopping(
-                monitor="val_loss", patience=patience))
-        if (learning_rate_decay):
-            def scheduler(epoch):
-                """ step decay func"""
+                validation_data=None, early_stopping=False, patience=0,
+                learning_rate_decay=False, alpha=0.1, decay_rate=1,
+                verbose=True, shuffle=False):
+    callbacks = None
+    if validation_data is not None and (early_stopping or learning_rate_decay):
+        callbacks = []
+        if early_stopping:
+            callbacks.append(K.callbacks.EarlyStopping(patience=patience))
+        if learning_rate_decay:
+            def step_decay(epoch):
                 return alpha / (1 + decay_rate * epoch)
-            c_back = K.callbacks.LearningRateScheduler(scheduler, 1)
-            callback.append(c_back)
-    else:
-        callback = None
-
-    history = network.fit(
-        data,
-        labels,
-        batch_size=batch_size,
-        epochs=epochs,
-        validation_data=validation_data,
-        shuffle=shuffle,
-        verbose=verbose,
-        callbacks=callback)
-    return history
+            callbacks.append(K.callbacks.LearningRateScheduler(schedule=step_decay, verbose=1))
+    return network.fit(data, labels, batch_size=batch_size, epochs=epochs,
+                       validation_data=validation_data, callbacks=callbacks,
+                       verbose=verbose, shuffle=shuffle)
