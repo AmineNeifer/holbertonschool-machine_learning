@@ -1,12 +1,14 @@
 #!/usr/bin/env python3
 
-import numpy as np
 import tensorflow as tf
-from tensorflow.keras.layers import Lambda, Flatten, Input, Dense
-from tensorflow.keras.models import Model
-from tensorflow.keras import metrics
+import tensorflow.keras as K
 #make VAE 
 
+Lambda = K.layers.Lambda
+Input = K.layers.Input
+Dense = K.layers.Dense
+Model = K.models.Model
+metrics = K.metrics
 def autoencoder(input_dims, hidden_layers, latent_dims):
   def sampling_func(inputs):
     z_mean, z_log_var = inputs
