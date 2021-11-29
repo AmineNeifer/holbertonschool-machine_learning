@@ -1,66 +1,66 @@
-#!/usr/bin/env python3
-
-""" contains Variational autoencoder implementation"""
-import tensorflow.keras as keras
-
+import numpy as np
+import tensorflow as tf
+from tensorflow.keras.layers import Lambda, Flatten, Input, Dense
+from tensorflow.keras.models import Model
+from tensorflow.keras import metrics
+#make VAE 
 
 def autoencoder(input_dims, hidden_layers, latent_dims):
-    """
-    Creates variational autoencoder
+  def sampling_func(inputs):
+    z_mean, z_log_var = inputs
+    batch_size = tf.shape(z_mean)[0]
+    epsilon = tf.random.normal(shape=(batch_size, latent_dims),
+                              mean=0., stddev=1.)
+    return z_mean + tf.exp(z_log_var / 2) * epsilon
 
-    @input_dims is an integer containing the dimensions of the model input
-    @hidden_layers: list containing the n° of nodes for eac
-                    hidden layer in the encoder, respectivel
-        -the hidden layers should be reversed for the decoder
-    @latent_dims: int containing the dims of the latent space representation
+  def make_encoder(input_dims, hidden_layers, latent_dims):
+    enc_inp = Input(shape=(input_dims,))
+    x = enc_inp
+    for n in hidden_layers:
+      x = Dense(n, activation='relu')(x)
+    z_mean = Dense(latent_dims)(x)
+    z_log_var = Dense(latent_dims)(x)
+    z = sampling_layer([z_mean, z_log_var])
+    return Model(inputs=enc_inp, outputs=[z, z_mean, z_log_var],
+                name="encoder")  
 
-    Returns: encoder, decoder, auto
-        @encoder is the encoder model
-        @decoder is the decoder model
-        @auto is the full autoencoder model
-    """
-    Input = keras.Input
-    Dense = keras.layers.Dense
-    Lambda = keras.layers.Lambda
-    Model = keras.Model
-    K = keras.backend
+  def make_decoder(input_dims, hidden_layers, latent_dims):
+    decoder_input = Input(shape=(latent_dims,))
+    x = decoder_input
+    for n in hidden_layers[::-1]:
+      x = Dense(n, activation='relu')(x)
+    x = Dense(input_dims, activation='sigmoid')(x)
+    return Model(decoder_input, x, name="decoder")  
+  
+  #initialize a sampling layer
+  sampling_layer = Lambda(sampling_func, output_shape=(latent_dims,)) 
+  
+  encoder = make_encoder(input_dims, hidden_layers, latent_dims)
+  decoder = make_decoder(input_dims, hidden_layers, latent_dims)
 
-    inputs = Input((input_dims,))
-    h = inputs
-    for hidden_layer in hidden_layers:
-        h = Dense(hidden_layer, activation="relu")(h)
-    z_mean = Dense(latent_dims, activation=None)(h)
-    z_log_sigma = Dense(latent_dims, activation=None)(h)
+  x = Input(shape=(input_dims,))
+  z, z_mean, z_log_var = encoder(x)
+  #z = sampling_layer([z_mean, z_log_var])
+  x_decoded_mean = decoder(z)
+  vae = Model(x, x_decoded_mean) 
 
-    def sampling(args):
-        z_mean, z_log_sigma = args
-        epsilon = K.random_normal(shape=(K.shape(z_mean)[0], latent_dims))
-        return z_mean + K.exp(z_log_sigma) * epsilon
+  #loss function :
+  #we have two losses to consider  :
+  #the total loss is a sum of the reconstruction loss and the KL divergence loss term
+  #stands for reconstruction loss
+  #we will use the binary crossentropy
 
-    z = Lambda(sampling)([z_mean, z_log_sigma])
+  print("x is :", x)
+  print("x decoded mean :", x_decoded_mean)
+  
+  r_loss = input_dims * metrics.binary_crossentropy(x, x_decoded_mean) 
+  print("r_loss", r_loss)
+  kl_loss = -0.5 * tf.reduce_sum(1 + z_log_var - z_mean **2 - tf.math.exp(z_log_var), axis=-1)
+  print("kl_loss", kl_loss)
+  total_loss = tf.reduce_mean(r_loss + kl_loss)
 
-    encoder = Model(inputs, [z_mean, z_log_sigma, z])
-
-    latent_inputs = Input((latent_dims,))
-
-    x = latent_inputs
-    for hidden_layer in reversed(hidden_layers):
-        x = Dense(hidden_layer, activation='relu')(x)
-    outputs = Dense(input_dims, activation='sigmoid')(x)
-    decoder = Model(latent_inputs, outputs)
-
-    outputs = decoder(encoder(inputs))
-    vae = Model(inputs, outputs)
-
-    # vae custom binary crossentropy loss
-    def kl_reconstruction_loss(y_true, y_pred):
-        reconstruction_loss = keras.losses.binary_crossentropy(inputs, outputs)
-        reconstruction_loss *= input_dims
-        kl_loss = 1 + z_log_sigma - K.square(z_mean) - K.exp(z_log_sigma)
-        kl_loss = K.sum(kl_loss, axis=-1)
-        kl_loss *= -0.5
-        vae_loss = K.mean(reconstruction_loss + kl_loss)
-        return vae_loss
-
-    vae.compile(optimizer="adam", loss=kl_reconstruction_loss)
-    return encoder, decoder, vae
+  vae.add_loss(total_loss)
+  vae.compile(optimizer="adam")
+  
+  
+  return encoder, decoder, vae
