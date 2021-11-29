@@ -2,13 +2,13 @@
 
 
 """ Contains dropout_create_layer funct"""
-import tensorflow as tf
+import tensorflow.compat.v1 as tf
 
 
 def dropout_create_layer(prev, n, activation, keep_prob):
     """ create a layer with dropout regularization"""
-    reg = tf.layers.Dropout(keep_prob)
-    w = tf.contrib.layers.variance_scaling_initializer(mode='FAN_AVG')
+    reg = tf.layers.Dropout(1-keep_prob)
+    w = tf.keras.initializers.VarianceScaling(scale=2.0, mode=('fan_avg'))
     layer = tf.layers.Dense(
         units=n,
         kernel_initializer=w,

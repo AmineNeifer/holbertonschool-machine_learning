@@ -1,97 +1,133 @@
 #!/usr/bin/env python3
 
-
-""" contains Yolo class"""
-import tensorflow.keras as K
-import tensorflow as tf
-import numpy as np
-from glob import glob
 import cv2
+import glob
+import numpy as np
+import tensorflow.keras as K
 
-
-class Yolo():
-    """Class that uses the Yolo v3 algorithm to perform object detection"""
-
+class Yolo:
+    """Class to perform the Yolo algorithm on image data"""
     def __init__(self, model_path, classes_path, class_t, nms_t, anchors):
-        self.model = K.models.load_model(model_path)
-        with open(classes_path, "r") as f:
-            r = f.read().split("\n")[:-1]
-        self.class_names = r
-        self.class_t = class_t
-        self.nms_t = nms_t
-        self.anchors = anchors
-
-    def sigmoid(self, x):
-        """Sigmoid function """
-        return 1 / (1 + np.exp(-x))
+        """initializes the Yolo class"""
+        self.class_t = class_t # class score threshold
+        self.nms_t = nms_t # non max suppression threshold
+        self.model = K.models.load_model(model_path) # keras darknet model
+        self.anchors = anchors # anchor boxes
+        with open(classes_path) as f:
+            self.class_names = [class_name.strip() for class_name in f.readlines()]
 
     def process_outputs(self, outputs, image_size):
-        """it processes output"""
-        inp_w = self.model.input.shape[1].value
-        inp_h = self.model.input.shape[2].value
+        """processes the outputs of the model"""
         boxes = []
-        box_c = []
-        box_c_p = []
-        for output in outputs:
-            boxes.append(output[..., 0:4])
-            box_c.append(self.sigmoid(output[..., 4:5]))
-            box_c_p.append(self.sigmoid(output[..., 5:]))
-        img_w = image_size[1]
-        img_h = image_size[0]
-        for i in range(len(outputs)):
-            grid_h = boxes[i].shape[0]
-            grid_w = boxes[i].shape[1]
-            a = boxes[i].shape[2]
-            anchor_w = self.anchors[i, :, 0]
-            anchor_h = self.anchors[i, :, 1]
-            tx = boxes[i][..., 0]
-            ty = boxes[i][..., 1]
-            tw = boxes[i][..., 2]
-            th = boxes[i][..., 3]
-            cx = np.indices((grid_h, grid_w, a))[1]
-            cy = np.indices((grid_h, grid_w, a))[0]
-            bx = (self.sigmoid(tx) + cx) / grid_w
-            by = (self.sigmoid(ty) + cy) / grid_h
-            input_w = self.model.input.shape[1].value
-            input_h = self.model.input.shape[2].value
-            bw = anchor_w * np.exp(tw) / input_w
-            bh = anchor_h * np.exp(th) / input_h
-            x1 = bx - bw / 2
-            x2 = x1 + bw
-            y1 = by - bh / 2
-            y2 = y1 + bh
-            boxes[i][..., 0] = x1 * img_w
-            boxes[i][..., 1] = y1 * img_h
-            boxes[i][..., 2] = x2 * img_w
-            boxes[i][..., 3] = y2 * img_h
-        return boxes, box_c, box_c_p
+        box_confidences = []
+        box_class_probs = []
+
+        for i, output in enumerate(outputs):
+            anchors = self.anchors[i]
+            g_h, g_w = output.shape[:2]
+            
+            t_xy = output[..., :2]
+            t_wh = output[..., 2:4]
+            box_confidence = np.expand_dims(1/(1 + np.exp(-output[..., 4])), axis=-1)
+            box_class_prob = 1/(1 + np.exp(-output[..., 5:]))
+
+            b_wh = anchors * np.exp(t_wh)
+            b_wh = b_wh / self.model.inputs[0].shape.as_list()[1:3]
+            grid = np.tile(np.indices((g_w, g_h)).T, anchors.shape[0]).reshape((g_h, g_w) + anchors.shape)
+            b_xy = (1/(1 + np.exp(-t_xy)) + grid) / [g_w, g_h]
+            b_xy1 = b_xy - (b_wh / 2)
+            b_xy2 = b_xy + (b_wh / 2)
+            box = np.concatenate((b_xy1, b_xy2), axis=-1)
+            box = box * np.tile(np.flip(image_size, axis=0), 2)
+            boxes.append(box)
+            box_confidences.append(box_confidence)
+            box_class_probs.append(box_class_prob)
+
+        return boxes, box_confidences, box_class_probs
 
     def filter_boxes(self, boxes, box_confidences, box_class_probs):
-        """ filter boxes """
-        box_scores = []
+        """filters all boxes with a score below a specific threshold"""
+        filtered_boxes = []
         box_classes = []
-        box_class_scores = []
-        scores = []
-        classes = []
-        boxis = []
-        for i in range(len(boxes)):
-            box_scores.append(box_confidences[i] * box_class_probs[i])
-            box_classes.append(np.argmax(box_scores[i], axis=-1))
-            box_class_scores.append(np.max(box_scores[i], axis=-1))
-            filtering_mask = box_class_scores[i] >= self.class_t
-            scores += (box_class_scores[i][filtering_mask].tolist())
-            boxis += (boxes[i][filtering_mask].tolist())
-            classes += (box_classes[i][filtering_mask].tolist())
-        scores = np.array(scores)
-        boxis = np.array(boxis)
-        classes = np.array(classes)
-        return boxis, classes, scores
+        box_scores = []
 
-    def load_images(self, folder_path):
-        """ loads images using cv2"""
+        for i, b in enumerate(boxes):
+            bc = box_confidences[i]
+            bcp = box_class_probs[i]
+
+            bs = bc * bcp
+            bcl = np.argmax(bs, axis=-1)
+            bcs = np.max(bs, axis=-1)
+            idx = np.where(bcs >= self.class_t)
+
+            filtered_boxes.append(b[idx])
+            box_classes.append(bcl[idx])
+            box_scores.append(bcs[idx])
+
+        return np.concatenate(filtered_boxes), np.concatenate(box_classes), np.concatenate(box_scores)
+
+    def non_max_suppression(self, boxes, box_classes, box_scores):
+        """performs non max suppression on all remaining boxes"""
+        filtered_boxes = []
+        filtered_classes = []
+        filtered_scores = []
+        
+        classes = np.unique(box_classes)
+        # perform non max suppression on each class
+        for c in classes:
+            # get the box info for all boxes in this class
+            idx = np.where(box_classes == c)
+            b = boxes[idx]
+            bcl = box_classes[idx]
+            bs = box_scores[idx]
+
+            # get the indices of boxes ordered by score
+            ordered_idx = np.flip(bs.argsort(), axis=0)
+            # indices of boxes to keep
+            keep_idx = []
+            # calculate IOU relative to the max and repeat
+            # as long as there are boxes remaining
+            while ordered_idx.size > 1:
+                maximum, others = ordered_idx[0], ordered_idx[1:]
+                keep_idx.append(maximum)
+
+                # get coordinates for intersection
+                x1 = np.maximum(b[maximum][0], b[others][:, 0])
+                y1 = np.maximum(b[maximum][1], b[others][:, 1])
+                x2 = np.minimum(b[maximum][2], b[others][:, 2])
+                y2 = np.minimum(b[maximum][3], b[others][:, 3])
+
+                intersection = (x2 - x1) * (y2 - y1)
+
+                a_max = (b[maximum][2] - b[maximum][0]) * (b[maximum][3] - b[maximum][1])
+                a_others = (b[others][:, 2] - b[others][:, 0]) * (b[others][:, 3] - b[others][:, 1])
+
+                union = a_max + a_others - intersection
+
+                IOU = intersection / union
+
+                # indices that are below the threshold 
+                below_idx = np.where(IOU < self.nms_t)[0]
+                ordered_idx = ordered_idx[below_idx + 1]
+
+            if ordered_idx.size > 0:
+                keep_idx.append(ordered_idx[0])
+            keep_idx = np.array(keep_idx)
+
+            filtered_boxes.append(b[keep_idx])
+            filtered_classes.append(bcl[keep_idx])
+            filtered_scores.append(bs[keep_idx])
+
+        return np.concatenate(filtered_boxes), np.concatenate(filtered_classes), np.concatenate(filtered_scores)
+
+    @staticmethod
+    def load_images(folder_path):
+        """load all images in a folder"""
         images = []
-        images_p = []
-        for path in glob(folder_path + '/*'):
-            images.append(cv2.imread(path))
-            images_p.append(path)
-        return images, images_p
+        image_paths = []
+        for file_path in glob.glob(folder_path + '/*.*'):
+            image = cv2.imread(file_path)
+            if image is not None:
+                images.append(image)
+                image_paths.append(file_path)
+        return images, image_paths

@@ -1,37 +1,26 @@
 #!/usr/bin/env python3
 
-
-""" expectation"""
 import numpy as np
 pdf = __import__('5-pdf').pdf
 
-
 def expectation(X, pi, m, S):
-    """EM algorithm for a GMM"""
-    if not isinstance(X, np.ndarray):
+    """calculate expectation of all points"""
+    if type(X) is not np.ndarray or X.ndim != 2:
         return None, None
-    if len(X.shape) != 2:
-        return None, None
-    n, d = X.shape
-    if not isinstance(pi, np.ndarray):
-        return None, None
-    if len(pi.shape) != 1:
+    d = X.shape[1]
+    if type(pi) is not np.ndarray or pi.ndim != 1 or not np.isclose(np.sum(pi), 1):
         return None, None
     k = pi.shape[0]
-    if not np.isclose(pi.sum(), 1):
+    if type(m) is not np.ndarray or m.ndim != 2 or m.shape != (k, d):
         return None, None
-    if not isinstance(m, np.ndarray):
+    if type(S) is not np.ndarray or S.ndim != 3 or S.shape != (k, d, d):
         return None, None
-    if len(m.shape) != 2 or m.shape != (k, d):
-        return None, None
-    if not isinstance(S, np.ndarray):
-        return None, None
-    if len(S.shape) != 3 or S.shape != (k, d, d):
-        return None, None
-    y = np.zeros([k, n])
+    n = X.shape[0]
+    k = pi.shape[0]
+    g = np.zeros((k, n))
+
     for i in range(k):
-        pd = pdf(X, m[i], S[i])
-        y[i] = pd * pi[i]
-    likelihood = np.log(y.sum(axis=0)).sum()
-    y /= y.sum(axis=0)
-    return y, likelihood
+        g[i] = pi[i] * pdf(X, m[i], S[i])
+    l = np.sum(g, axis=0, keepdims=True)
+    g = g / l
+    return g, np.sum(np.log(l))

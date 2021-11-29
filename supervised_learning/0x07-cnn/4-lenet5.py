@@ -2,7 +2,7 @@
 
 
 """ lenet5 function implemented in tf v.1"""
-import tensorflow as tf
+import tensorflow.compat.v1 as tf
 
 
 def lenet5(x, y):
@@ -29,7 +29,7 @@ def lenet5(x, y):
         a tensor for the loss of the netowrk
         a tensor for the accuracy of the network
     """
-    w = tf.contrib.layers.variance_scaling_initializer()
+    w = tf.keras.initializers.VarianceScaling(scale=2.0)
 
     # Convolutional layer with 6 kernels of shape 5x5 with same padding
     C1 = tf.layers.Conv2D(
@@ -70,7 +70,7 @@ def lenet5(x, y):
     loss = tf.losses.softmax_cross_entropy(y, F8)
 
     # accuracy
-    equality = tf.equal(tf.argmax(F8, 1), tf.argmax(y, 1))
-    acc = tf.reduce_mean(tf.cast(equality, tf.float32))
+    equality = tf.equal(tf.argmax(input=F8, axis=1), tf.argmax(input=y, axis=1))
+    acc = tf.reduce_mean(input_tensor=tf.cast(equality, tf.float32))
     adam = tf.train.AdamOptimizer().minimize(loss)
     return s, adam, loss, acc

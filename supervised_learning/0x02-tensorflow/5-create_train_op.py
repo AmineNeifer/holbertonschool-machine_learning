@@ -2,10 +2,10 @@
 
 
 """ contains train funct"""
-
-import tensorflow as tf
+import tensorflow.compat.v1 as tf
 
 
 def create_train_op(loss, alpha):
     """ train count funct"""
-    return tf.train.GradientDescentOptimizer(alpha).minimize(loss)
+    optimizer = tf.train.GradientDescentOptimizer(alpha)
+    return optimizer.minimize(loss)

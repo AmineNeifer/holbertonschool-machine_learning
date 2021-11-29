@@ -1,42 +1,37 @@
 #!/usr/bin/env python3
 
+import tensorflow.compat.v1 as tf
 import numpy as np
-import tensorflow as tf
-train = __import__('6-train').train
 
+tf.disable_eager_execution()
+
+create_train_op = __import__('5-create_train_op').create_train_op
 
 def one_hot(Y, classes):
     """convert an array to a one-hot matrix"""
-    one_hot = np.zeros((Y.shape[0], classes))
-    one_hot[np.arange(Y.shape[0]), Y] = 1
-    return one_hot
+    oh = np.zeros((Y.shape[0], classes))
+    oh[np.arange(Y.shape[0]), Y] = 1
+    return oh
 
+# set variables
+np.random.seed(5)
+m = np.random.randint(20, 101)
+c = 10
+a = 0.01
+lib= np.load('MNIST.npz')
+X_test = lib['X_test'][:m].reshape((m, -1))
+Y_test = one_hot(lib['Y_test'][:m], c)
+nx = X_test.shape[1]
 
-if __name__ == '__main__':
-    lib = np.load('../data/MNIST.npz')
-    X_train_3D = lib['X_train']
-    Y_train = lib['Y_train']
-    X_train = X_train_3D.reshape((X_train_3D.shape[0], -1))
-    Y_train_oh = one_hot(Y_train, 10)
-    X_valid_3D = lib['X_valid']
-    Y_valid = lib['Y_valid']
-    X_valid = X_valid_3D.reshape((X_valid_3D.shape[0], -1))
-    Y_valid_oh = one_hot(Y_valid, 10)
+tf.set_random_seed(0)
+x = tf.placeholder(tf.float32, shape=(None, nx))
+y = tf.placeholder(tf.float32, shape=(None, c))
+layer = tf.layers.Dense(c, activation=None, kernel_initializer=tf.keras.initializers.VarianceScaling(mode='fan_avg'))
+y_pred = layer(x)
+loss = tf.losses.softmax_cross_entropy(y, y_pred)
+train_op = create_train_op(loss, a)
 
-    layer_sizes = [256, 256, 10]
-    activations = [tf.nn.tanh, tf.nn.tanh, None]
-    alpha = 0.01
-    iterations = 1000
-
-    tf.set_random_seed(0)
-    save_path = train(
-        X_train,
-        Y_train_oh,
-        X_valid,
-        Y_valid_oh,
-        layer_sizes,
-        activations,
-        alpha,
-        iterations,
-        save_path="./model.ckpt")
-    print("Model saved in path: {}".format(save_path))
+with tf.Session() as sess:
+    sess.run(tf.global_variables_initializer())
+    sess.run(train_op, feed_dict={y:Y_test, x:X_test})
+    print(np.array2string(sess.run(y_pred, feed_dict={x:X_test}), precision=5))

@@ -19,7 +19,7 @@ def resnet50():
         strides=2,
         kernel_initializer=w)(input_layer)
     conv_7x7 = K.layers.BatchNormalization()(conv_7x7)
-    conv_7x7 = K.layers.Activation('relu')(conv_7x7)
+    conv_7x7 = K.layers.ReLU()(conv_7x7)
 
     x = K.layers.MaxPool2D(
         (3, 3),

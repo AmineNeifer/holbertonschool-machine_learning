@@ -1,21 +1,14 @@
 #!/usr/bin/env python3
 
-""" contains a function that initializes centroids"""
 import numpy as np
 
-
 def initialize(X, k):
-    """ initializes cluster centroids for K-means"""
-    if not isinstance(X, np.ndarray):
+    """initializes centroids for kmeans"""
+    if type(X) is not np.ndarray or X.ndim != 2:
         return None
-    if len(X.shape) != 2:
+    if type(k) is not int or int(k) != k or k < 1:
         return None
-    if not isinstance(k, int):
-        return None
-    if k <= 0:
-        return None
-    n, d = X.shape
-    high = np.amax(X, axis=0)
-    low = np.amin(X, axis=0)
-    cent = np.random.uniform(low, high, (k, d))
-    return cent
+    _, d = X.shape
+    mins = np.min(X, axis=0)
+    maxs = np.max(X, axis=0)
+    return np.random.uniform(mins, maxs, size=(k, d))

@@ -1,38 +1,24 @@
 #!/usr/bin/env python3
 
-
-""" contains markov_chaine func"""
 import numpy as np
 
 
 def markov_chain(P, s, t=1):
-    """
-    Determines the probability of a markov chain being in a
-    particular state after a specified number of iterations
-
-    @P square 2D np.ndarray, (n, n) representing the transition matrix
-        -P[i, j] is the probability of transitioning from state i to state j
-        -n is the number of states in the markov chain
-    @s np.ndarray, (1, n) represents the prob of starting in each state
-    @t number of iterations that the markov chain has been through
-
-    Returns: a numpy.ndarray of shape (1, n) representing the probability
-    of being in a specific state after t iterations, or None on failure
-    """
-    if not isinstance(P, np.ndarray):
+    """markov chain"""
+    if type(P) is not np.ndarray:
         return None
-    if len(P.shape) != 2 or P.shape[0] != P.shape[1]:
+    if P.ndim != 2 or P.shape[0] != P.shape[1]:
         return None
-    if not isinstance(s, np.ndarray):
+    if not np.allclose(np.sum(P, axis=1), 1):
         return None
-    if (P < 0).any():
+    n = P.shape[0]
+    if type(s) is not np.ndarray:
         return None
-    if len(s.shape) != 2 or s.shape[0] != 1 or s.shape[1] != P.shape[0]:
+    if s.shape != (1, n):
         return None
-    if not isinstance(t, int):
+    if not np.sum(s) == 1:
         return None
-    if t <= 0:
+    if t < 1 or t != int(t):
         return None
-    for i in range(t):
-        s = np.matmul(s, P)
-    return s
+    Pt = np.linalg.matrix_power(P, t)
+    return np.matmul(s, Pt)

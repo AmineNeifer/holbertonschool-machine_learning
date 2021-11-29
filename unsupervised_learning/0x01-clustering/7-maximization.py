@@ -1,24 +1,24 @@
 #!/usr/bin/env python3
 
-
-""" contains maximization funct"""
 import numpy as np
 
-
 def maximization(X, g):
-    """M step for E: algorithm for a GMM"""
-    if not isinstance(X, np.ndarray):
+    """calculate maximization of all points"""
+    if type(X) is not np.ndarray or X.ndim != 2:
         return None, None, None
-    if len(X.shape) != 2:
+    n, d = X.shape
+    if type(g) is not np.ndarray or g.ndim != 2 or g.shape[1] != n or not np.allclose(np.sum(g, axis=0), np.ones(g.shape[1])):
         return None, None, None
-    if not isinstance(g, np.ndarray):
-        return None, None, None
-    if len(g.shape) != 2:
-        return None, None, None
-    m = np.sum(np.matmul(g, X), axis=0) / np.sum(g, axis=1)
-    pi = 1 / (n * np.sum(g, axis=1))
+    k = g.shape[0]
+    m = np.zeros((k, d))
     S = np.zeros((k, d, d))
+
+    nk = np.sum(g, axis=1)
+    pi = nk / n
+    
     for i in range(k):
-        S[i] = np.matmul(g[i].reshape(1, n) * (X - m[i]).T, (X - m[i]))
-        S[i] /= np.sum(g, axis=1)[i]
+        gi = g[i].reshape((-1, 1))
+        m[i] = np.sum(gi * X, axis=0) / nk[i]
+        Xm = X - m[i]
+        S[i] = np.matmul(Xm.T, Xm * gi) / nk[i]
     return pi, m, S
