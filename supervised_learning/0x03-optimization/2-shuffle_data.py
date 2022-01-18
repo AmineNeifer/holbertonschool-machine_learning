@@ -8,4 +8,5 @@ import numpy as np
 def shuffle_data(X, Y):
     """ Returns: X & Y shuffled"""
     np.random.seed(0)
-    return np.random.permutation(X), np.random.permutation(Y)
+    n = np.random.permutation(len(X))
+    return X[n], Y[n]
